@@ -5,7 +5,7 @@ function prevent_xss(request_str)
 }
 
 
-function escape_html_entity(request_str) 
+function escape_malicious_characters(request_str) 
 {
     // Replace all occurences of risky characters (<, >, ", &, ') with their HTML entity:
     request_str = request_str.replace(/</g, "&lt;")     // Escape < char.
