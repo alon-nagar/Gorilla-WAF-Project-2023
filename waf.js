@@ -18,7 +18,18 @@ function main(r)
         //r.return(302, '/block.html?name=XSS Attack&count=2');
         //count++;
         //r.args = prevent_xss(r.args);
-        if (JSON.stringify(r.args).includes("<script>"))
+        //r.internalRedirect('@app-backend');
+        //var p = JSON.stringify(r.args);
+        /*      for (var key in Object.keys(r.args))
+        {
+                if (r.args[key] != undefined)
+                {
+                        r.args[key] = escape_malicious_characters(r.args[key]);
+                }
+        }*/
+        //r.internalRedirect('@app-backend');
+        //r.args = escape_malicious_characters(r.args);
+        if (JSON.stringify(r.args).toLowerCase().includes("<script>"))
         {
                 r.return(302, '/block.html?name=XSS Attack&count=2');
         }
@@ -43,15 +54,14 @@ function prevent_xss(request_str)
 
 function escape_malicious_characters(request_str) 
 {
-    // Replace all occurences of risky characters (<, >, ", &, ') with their HTML entity:
-    request_str = request_str.replace(/</g, "&lt;")     // Escape < char.
-                             .replace(/>/g, "&gt;")     // Escape > char.
-                             .replace(/"/g, "&quot;")   // Escape " char.
-                             .replace(/&/g, "&amp;")    // Escape & char.
-                             .replace(/'/g, "&#x27;");  // Escape ' char.
-
-    // Return the escaped, safe string:
-    return request_str;
+  // Replace all occurences of risky characters (<, >, ", &, ') with their HTML entity:
+  request_str = request_str.replace(/</g, "&lt;")     // Escape < char.
+                           .replace(/>/g, "&gt;")     // Escape > char.
+                           .replace(/&/g, "&amp;")    // Escape & char.
+                           .replace(/'/g, "&#x27;")  // Escape ' char.
+                           .replace(/;/g, "&#59;");  // Escape ; char.
+  // Return the escaped, safe string:
+  return request_str;
 }
 
 
