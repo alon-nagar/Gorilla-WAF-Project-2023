@@ -1,19 +1,34 @@
-// Main function for XSS attack prevention:
-function prevent_xss(request_str) 
+function is_xss(request)
 {
-    request_str = escape_html_entity(str);
+    if (request.method == "GET")
+    {
+		// Iterate over the JSON object 'request.args', that contains the parameters of the GET request:
+		for (let param_name in request.args)
+		{
+			let param_value = request.args[param_name];
+
+			// If XSS is detected in the current parameter's name OR value -> return true:
+			if (is_text_xss(param_name) || is_text_xss(param_value))
+			{
+				return true;
+			}
+		}
+		
+        // If the function hasn't returned true yet, then no XSS was detected:
+        return false;
+    }
+
+    else if (request.method == "POST" || request.method == "PUT" || request.method == "DELETE")
+    {
+        return is_text_xss(request.requestText);
+    }
+
+    return false;
 }
 
 
-function escape_malicious_characters(request_str) 
+function is_text_xss(str)
 {
-    // Replace all occurences of risky characters (<, >, ", &, ') with their HTML entity:
-    request_str = request_str.replace(/</g, "&lt;")     // Escape < char.
-                             .replace(/>/g, "&gt;")     // Escape > char.
-                             .replace(/"/g, "&quot;")   // Escape " char.
-                             .replace(/&/g, "&amp;")    // Escape & char.
-                             .replace(/'/g, "&#x27;");  // Escape ' char.
-
-    // Return the escaped, safe string:
-    return request_str;
+    return str.toLowerCase().includes("<" || ">" || "\"" || "<script>" || "</script>"
+                                        || "&lt;" || "&gt;" || "&quot;");
 }
