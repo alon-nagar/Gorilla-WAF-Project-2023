@@ -10,6 +10,7 @@ function is_xss(request)
 			// If XSS is detected in the current parameter's name OR value -> return true:
 			if (is_text_xss(param_name) || is_text_xss(param_value))
 			{
+                // CR: What's the [ , ] for? What does each element in the array represent?
 				return [true, param_name + "=" + param_value];
 			}
 		}
@@ -20,6 +21,7 @@ function is_xss(request)
 
     else if (request.method == "POST" || request.method == "PUT" || request.method == "DELETE")
     {
+        // CR: What's the [ , ] for? What does each element in the array represent?
         return [ is_text_xss(request.requestText), request.requestText ];
     }
 
@@ -27,6 +29,7 @@ function is_xss(request)
 }
 
 
+// CR: 'str' is not a good name for a parameter. It's not clear what it is.
 function is_text_xss(str)
 {
     return str.toLowerCase().includes("<" || ">" || "\"" || "<script>" || "</script>"
