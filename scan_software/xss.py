@@ -1,6 +1,4 @@
-import json
-
-def is_xss(request_data):
+def is_request_xss(request_data):
     """Function to check if a request contains XSS (Cross-Site Scripting) characters.
 
     Args:
@@ -9,14 +7,11 @@ def is_xss(request_data):
     Returns:
         tuple(bool, str): A tuple of (True/False - XSS detected, str - The string where XSS was detected).
     """
-    #data_json = json.loads(request_data)
     
-    print(request_data)#
     for param_name, param_value in request_data.items():
         if is_text_xss(param_value):
             return (True, param_value)
     
-    print("No XSS detected!")#
     return (False, None)
         
     

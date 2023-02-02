@@ -1,6 +1,6 @@
 import flask
 
-# Attack defense:
+# Attack defense modules:
 import xss
 
 app = flask.Flask(__name__)  # Define the Flask app's name.
@@ -15,7 +15,7 @@ def main():
 @app.route("/", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
 def handle_request(url=""):
     text_to_check = ""
-    
+
     # Check the request's methods and act accordingly (because the request data (that we want to scan) is in different places):
     if flask.request.method in [ "GET", "HEAD", "DELETE" ]:
         text_to_check = flask.request.args
@@ -30,10 +30,20 @@ def handle_request(url=""):
 
 
 def check_for_vulnerabilities(request_data):
-    (is_xss, xss_text) = xss.is_xss(request_data)
+    """Function to check for vulnerabilities in the request data. If found, it return a BLOCK response.
+
+    Args:
+        request_data (werkzeug.datastructures.ImmutableMultiDict): The request data to check for vulnerabilities (the actual data is in HTTP request).
+
+    Returns:
+        str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
+    """
+
+    (is_xss, xss_text) = xss.is_request_xss(request_data)
     
     if is_xss:
-        return f"BLOCK{{attack_name='XSS Attack', blocked_text={xss_text}, count=3}}"
+        xss_text = xss_text.replace('"', '\\"')
+        return f'BLOCK{{"attack_name":"XSS Attack", "blocked_text":"{xss_text}", "count":3}}'
     else:
         return "ALLOW"
 

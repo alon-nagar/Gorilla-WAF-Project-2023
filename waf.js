@@ -2,8 +2,15 @@ async function main(r)
 {
 	try
 	{
-		// Send the client's request for vulnerability scanning (to the Python Flask server on port 3333):
-        let reply = await ngx.fetch("http://127.0.0.1:3333" + r.uri, {
+		// Parse the GET parameters if they exist, to a url string, that will be fetch:
+		let url = "http://127.0.0.1:3333" + r.uri;
+		if (r.args)
+		{
+			url += "?" + dict_to_uri_parameters_string(r.args);
+		}
+
+		// Send the client's \request for vulnerability scanning (to the Python Flask server on port 3333):
+        let reply = await ngx.fetch(url, {
         	method: r.method,
         	headers: r.headersIn,
         	body: r.requestText
@@ -11,7 +18,7 @@ async function main(r)
 
 		// Get the response from the Python Flask server (which is either "ALLOW", "BLOCK", or "BLACKLIST"):
 		let vulnerability_status = await reply.text();
-
+		
 		// If the response is "ALLOW", pass the client's request to the backend server:
 		if (vulnerability_status == "ALLOW")
 		{
@@ -39,7 +46,8 @@ async function main(r)
 			let count = json_obj.count;
 
 			// Parse the data to a block page, and return it to the client:
-			let block_page = `/block.html?name=${attack_name}&text=${blocked_text}count=${count}`;
+			let block_page = `/block.html?name=${attack_name}&text=${blocked_text}&count=${count}`;
+
 			r.return(302, block_page);
 		}
 
@@ -57,9 +65,25 @@ async function main(r)
 	catch (error_msg)
 	{
 		// If an error occurred, return it to the client:
-		r.return(302, error_msg);
+		r.return(200, error_msg);
 	}
 }
 
+
+/*
+ * Convert a dictionary to a URI parameters string.
+ * For example: { "param1": "value1", "param2": "value2" } --> "param1=value1&param2=value2"
+ * Source: https://stackoverflow.com/questions/1714786/query-string-encoding-of-a-javascript-object
+ */
+function dict_to_uri_parameters_string(obj) 
+{
+	var str = [];
+	for (var p in obj)
+	{
+	   str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+	}
+	
+	return str.join("&");
+}
 
 export default { main };
