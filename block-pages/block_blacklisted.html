@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="icon" href="gorilla-icon-red.png">
+        <title>Blocked by Gorilla</title>
+        <style>
+            html {
+                background: rgb(141, 67, 67);
+            }
+            body {
+                max-width: 40em;
+                padding: 20px 20px;
+                margin: 6em auto 19em;
+                background: #fff;
+                font-family: "Lucida Grande", monospace;
+                box-shadow: 0 .3em 1em rgb(36, 33, 33);
+                border-radius: 20px;
+                font-size: 20px;
+            }
+           
+            img {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 70%;
+            }
+
+            h1 {
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <img src="gorilla-waf-logo-red.png" alt="Logo-Gorilla-WAF" width="70%">
+        <h1>You were banned from this site</h1>
+        
+        <p>
+            Dear user, <br>
+            It looks like you were banned from this site, due to performing:
+		        <p style="font-weight: bold; font-size:120%; text-align: center;" id="attacks_performed"></p>
+	        
+            If you think this is a mistake, please contact the site administrator or Gorilla's WAF team. <br>
+        </p>
+    </body>
+
+    <script>
+        var urlParams = new URLSearchParams(window.location.search)
+        
+        let attacks_performed = urlParams.get('attacks_performed') || "X"
+        document.getElementById('attacks_performed').innerText = attacks_performed
+    </script>
+
+</html>
