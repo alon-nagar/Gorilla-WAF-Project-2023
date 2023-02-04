@@ -2,6 +2,7 @@ import flask
 
 # Attack defense modules:
 import xss
+import sql_injection.sqli
 
 app = flask.Flask(__name__)  # Define the Flask app's name.
 
@@ -40,10 +41,14 @@ def check_for_vulnerabilities(request_data):
     """
 
     (is_xss, xss_text) = xss.is_request_xss(request_data)
+    (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
         return f'BLOCK{{"attack_name":"XSS Attack", "blocked_text":"{xss_text}", "count":3}}'
+    if is_sqli:
+        sqli_text = sqli_text.replace('"', '\\"')
+        return f'BLOCK{{"attack_name":"SQL Injection Attack", "blocked_text":"{sqli_text}", "count":3}}'
     else:
         return "ALLOW"
 

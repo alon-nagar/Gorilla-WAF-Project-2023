@@ -6,16 +6,14 @@ Note: For this script to run correctly, you must first run "sqli_train_model.py"
 
 Requirements:
 - pip install pickle
-- pip install scikit-learn
 """
 
 
 import pickle
-from sklearn.feature_extraction.text import CountVectorizer
 
 
-sqli_detection_model = pickle.load(open("ml_sqli_model.pickle", "rb"))
-vectorizer = CountVectorizer()
+sqli_detection_model = pickle.load(open("sql_injection/ml_sqli_model.pickle", "rb"))
+vectorizer = pickle.load(open("sql_injection/vectorizer_ml_sqli_model.pickle", "rb"))
 
 
 def is_request_sqli(request_data):
@@ -44,4 +42,8 @@ def is_text_sqli(text):
     Returns:
         bool: True - SQLi detected, False - Safe string.
     """
-    return sqli_detection_model.predict(vectorizer.transform([text]))[0] == 1
+    print("Text:", text)
+    if len(text) > 0:  # To avoid `ValueError: empty vocabulary; perhaps the documents only contain stop words`
+        return sqli_detection_model.predict(vectorizer.transform([text]))[0] == 1
+    
+    return False

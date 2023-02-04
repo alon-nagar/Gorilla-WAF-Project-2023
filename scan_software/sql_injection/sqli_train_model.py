@@ -62,5 +62,6 @@ for model, model_name in zip(models, models_names):
 model = LinearSVC()   # Define the best model [Support Vector Machine].
 model.fit(X, labels)  # Train model
 
-# Export model to a file called "ml_sqli_model.pickle":
+# Export model&vectorizer to a file called "ml_sqli_model.pickle" and "vectorizer_ml_sqli_model.pickle":
 pickle.dump(model, open("ml_sqli_model.pickle", "wb"))
+pickle.dump(vectorizer, open("vectorizer_ml_sqli_model.pickle", "wb"))
