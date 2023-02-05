@@ -3,7 +3,11 @@ import flask
 # Attack defense modules:
 import xss
 
+import waf_database
 app = flask.Flask(__name__)  # Define the Flask app's name.
+# waf = waf_database.MongoDB("127.0.0.1", 27017)
+# waf.add_to_blacklist("11111", "XSS", "3", "True")
+# waf.add_to_incoming_requests("11111", 3333, "XSS", True, "XSS", "11111")
 
 def main():
     # Start the Flask app:
@@ -38,7 +42,6 @@ def check_for_vulnerabilities(request_data):
     Returns:
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
-
     (is_xss, xss_text) = xss.is_request_xss(request_data)
     
     if is_xss:
