@@ -112,6 +112,15 @@ class MongoDB:
         }
         return self.__db["IncomingPackets"].find(entry_to_find)
     
+    def get_attacks_performed(self, ip_address):
+        """
+        Function that returns the attacks that the user preformed.
+        
+        Args:
+            ip_address (str): Attacker's IP Address.
+        """
+        return self.find_in_blacklist(ip_address)["Attacks Performed"]
+    
     
     def update_blacklist(self, ip_address, num_of_attacks, attack_name):
         """
@@ -127,14 +136,11 @@ class MongoDB:
             "IP Address": ip_address,
         }
         
-        current_attacks = ""
-        if num_of_attacks == 1:
-            current_attacks = attack_name
-
-        else:
-            current_attacks = self.find_in_blacklist(ip_address)["Attacks Performed"] + "," + attack_name
+        #current_attacks = self.get_attack_preformed(ip_address) + "," + attack_name
+        current_attacks = self.find_in_blacklist(ip_address)["Attacks Performed"] + "," + attack_name
         
         new_value = {}
+        #If the client is at the maximum number of attacks, block him:
         if num_of_attacks == MAX_NUM_OF_ATTACKS:
             new_value = { "$set": {"Attacks Performed": current_attacks, "Num of Attacks": num_of_attacks, "Is Blocked": True } }
         else:
@@ -174,7 +180,7 @@ class MongoDB:
         }
         self.__db["Blacklist"].delete_one(entry_to_delete)
         
-    def is_in_blackList(self, ip_address):
+    def is_in_blacklist(self, ip_address):
         """
         Check if the given IP is in the "Blacklist" collection.
         
@@ -196,17 +202,7 @@ class MongoDB:
             Args:
                 ip_address (str): Attacker's IP Address.
         """
-        if (not self.is_in_blackList(ip_address)):
+        if (not self.is_in_blacklist(ip_address)):
             return False
         return self.find_in_blacklist(ip_address)["Is Blocked"]
-
-
-    def get_attack_preformed(self, ip_address):
-        """
-        Function that returns the attacks that the user preformed.
-        
-        Args:
-            ip_address (str): Attacker's IP Address.
-        """
-        return self.find_in_blacklist(ip_address)["Attacks Performed"]
         
