@@ -190,15 +190,15 @@ class MongoDB:
         return self.__db["Blacklist"].find_one(entry_to_find) is not None
     
     
-    def is_blocked(ip_address):
-    # """
-    # Function that checks if the user is blocked.
-    # Args:
-    #     ip_address (str): Attacker's IP Address.
-    # """
-    if not self.is_in_blackList(ip_address):
-        return False
-    return self.find_in_blacklist(ip_address)["Is Blocked"]
+    def is_blocked(self, ip_address):
+        """
+            Function that checks if the user is blocked.
+            Args:
+                ip_address (str): Attacker's IP Address.
+        """
+        if (not self.is_in_blackList(ip_address)):
+            return False
+        return self.find_in_blacklist(ip_address)["Is Blocked"]
 
 
     def get_attack_preformed(self, ip_address):
