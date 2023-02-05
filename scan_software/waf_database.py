@@ -113,7 +113,7 @@ class MongoDB:
         return self.__db["IncomingPackets"].find(entry_to_find)
     
     
-    def update_blacklist_num_of_attacks(self, ip_address, new_val):
+    def update_blacklist(self, ip_address, num_of_attacks, attack_name):
         """
         Update the number of attacks that the attacker did, in the "Blacklist" collection, by the given IP.
         
@@ -127,10 +127,18 @@ class MongoDB:
             "IP Address": ip_address,
         }
         
-        if new_val == MAX_NUM_OF_ATTACKS:
-            new_value = { "$set": { "Num of Attacks": new_val, "Is Blocked": True } }
+        current_attacks = ""
+        if num_of_attacks == 1:
+            current_attacks = attack_name
+
         else:
-            new_value = { "$set": { "Num of Attacks": new_val } }
+            current_attacks = self.find_in_blacklist(ip_address)["Attacks Performed"] + "," + attack_name
+        
+        new_value = {}
+        if num_of_attacks == MAX_NUM_OF_ATTACKS:
+            new_value = { "$set": {"Attacks Performed": current_attacks, "Num of Attacks": num_of_attacks, "Is Blocked": True } }
+        else:
+            new_value = { "$set": {"Attacks Performed": current_attacks, "Num of Attacks": num_of_attacks } }
             
         self.__db["Blacklist"].update_one(entry_to_update, new_value)
         
@@ -165,4 +173,40 @@ class MongoDB:
             "IP Address": ip_address, 
         }
         self.__db["Blacklist"].delete_one(entry_to_delete)
+        
+    def is_in_blackList(self, ip_address):
+        """
+        Check if the given IP is in the "Blacklist" collection.
+        
+        Args:
+            ip_address (str): Attacker's IP Address, the IP address we want to check.
+        Returns:
+            bool: True if the IP is in the collection, False if not.
+        """
+        # Define the entry we want to find in "Blacklist" collection, and return the result:
+        entry_to_find = {
+            "IP Address": ip_address, 
+        }
+        return self.__db["Blacklist"].find_one(entry_to_find) is not None
+    
+    
+    def is_blocked(ip_address):
+    # """
+    # Function that checks if the user is blocked.
+    # Args:
+    #     ip_address (str): Attacker's IP Address.
+    # """
+    if not self.is_in_blackList(ip_address):
+        return False
+    return self.find_in_blacklist(ip_address)["Is Blocked"]
+
+
+    def get_attack_preformed(self, ip_address):
+        """
+        Function that returns the attacks that the user preformed.
+        
+        Args:
+            ip_address (str): Attacker's IP Address.
+        """
+        return self.find_in_blacklist(ip_address)["Attacks Performed"]
         

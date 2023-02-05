@@ -5,9 +5,10 @@ import xss
 
 import waf_database
 app = flask.Flask(__name__)  # Define the Flask app's name.
-# waf = waf_database.MongoDB("127.0.0.1", 27017)
-# waf.add_to_blacklist("11111", "XSS", "3", "True")
-# waf.add_to_incoming_requests("11111", 3333, "XSS", True, "XSS", "11111")
+
+#Define the database
+db = waf_database.MongoDB("127.0.0.1", 27017)
+
 
 def main():
     # Start the Flask app:
@@ -18,19 +19,26 @@ def main():
 @app.route("/<path:url>", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
 @app.route("/", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
 def handle_request(url=""):
-    text_to_check = ""
-
-    # Check the request's methods and act accordingly (because the request data (that we want to scan) is in different places):
-    if flask.request.method in [ "GET", "HEAD", "DELETE" ]:
-        text_to_check = flask.request.args
-        
-    elif flask.request.method in [ "POST", "PUT", "PATCH" ]:
-        text_to_check = flask.request.form
+    
+    #Check if the request's IP is blocked
+    if (db.is_blocked(flask.request.environ.get("REMOTE_ADDR")) == True):
+        attacks_performed = db.get_attacks_performed(flask.request.environ.get("REMOTE_ADDR"))
+        return f'BLACKLIST{{"attacks_performed=" "{attacks_performed}"}}'
     
     else:
-        return "BLOCK{attack_name='Unknown Attack', blocked_text='Unknown Attack', count=0}"
-    
-    return check_for_vulnerabilities(text_to_check)
+        text_to_check = ""
+
+        # Check the request's methods and act accordingly (because the request data (that we want to scan) is in different places):
+        if flask.request.method in [ "GET", "HEAD", "DELETE" ]:
+            text_to_check = flask.request.args
+            
+        elif flask.request.method in [ "POST", "PUT", "PATCH" ]:
+            text_to_check = flask.request.form
+        
+        else:
+            return "BLOCK{attack_name='Unknown Attack', blocked_text='Unknown Attack', count=0}"
+        
+        return check_for_vulnerabilities(text_to_check)
 
 
 def check_for_vulnerabilities(request_data):
@@ -49,7 +57,6 @@ def check_for_vulnerabilities(request_data):
         return f'BLOCK{{"attack_name":"XSS Attack", "blocked_text":"{xss_text}", "count":3}}'
     else:
         return "ALLOW"
-
 
 if __name__ == "__main__":
     main()
