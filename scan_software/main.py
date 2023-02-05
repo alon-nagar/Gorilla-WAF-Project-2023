@@ -1,30 +1,17 @@
 import flask
-
 from datetime import datetime
-from werkzeug.datastructures import ImmutableMultiDict
 import urllib.parse
 
 # Attack defense modules:
 import xss
 
+# Import other custom modules:
 import waf_database
+
+# Define the Flask app and the database:
 app = flask.Flask(__name__)  # Define the Flask app's name.
-
-#Define the database
 db = waf_database.MongoDB("127.0.0.1", 27017)
-MAX_NUM_OF_ATTACKS = 3
-
-def request_to_raw(flask_request):
-    request_lines = [ f"{flask_request.method} {flask_request.path} {flask_request.environ['SERVER_PROTOCOL']}" ]
     
-    for key, value in flask_request.headers:
-        request_lines.append(f"{key}: {value}")
-    
-    if flask_request.form:
-        request_lines.append(" ")
-        request_lines.append(urllib.parse.urlencode(flask_request.form, doseq=False))
-
-    return "\n".join(request_lines)
     
 def main():
     # Start the Flask app:
@@ -34,8 +21,6 @@ def main():
 # Function to handle each incoming request (it check for vulnerabilities in it):
 @app.route("/<path:url>", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
 @app.route("/", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
-
-
 def handle_request(url=""):
 
     text_to_check = ""
@@ -78,17 +63,16 @@ def handle_request(url=""):
             num_of_attacks = db.find_in_blacklist(client_ip)["Num of Attacks"] + 1
             db.update_blacklist(client_ip, num_of_attacks, attack_detected)
             
-            if (num_of_attacks == MAX_NUM_OF_ATTACKS):
+            if (num_of_attacks == waf_database.MAX_NUM_OF_ATTACKS):
                 attacks_performed = db.get_attacks_performed(client_ip)
                 return f'BLACKLIST{{"attacks_performed":"{attacks_performed}"}}'
                 
-            return f'BLOCK{{"attack_name": "{attack_detected}", "blocked_text": "{blocked_text}", "count" : {MAX_NUM_OF_ATTACKS - num_of_attacks}}}'
+            return f'BLOCK{{"attack_name": "{attack_detected}", "blocked_text": "{blocked_text}", "count" : {waf_database.MAX_NUM_OF_ATTACKS - num_of_attacks}}}'
         
         # If the client isn't in the Blacklist, add him and give him a counter of 1 attack:
         else:
             db.add_to_blacklist(client_ip, attack_detected, 1, False)
             return f'BLOCK{{"attack_name": "{attack_detected}", "blocked_text": "{blocked_text}", "count" : 2}}'
-
 
 
 def check_for_vulnerabilities(request_data):
@@ -107,6 +91,30 @@ def check_for_vulnerabilities(request_data):
         return ("XSS Attack", xss_text)
     else:
         return ("Safe", None)
+
+
+def request_to_raw(flask_request):
+    """Function to convert the Flask request to a raw HTTP request (for saving to the DB).
+    For example (returned string):
+        GET / HTTP/1.1
+        Host: www.example.com
+    
+    Args:
+        flask_request (flask.request): The Flask request to convert.
+
+    Returns:
+        str: The raw HTTP request.
+    """
+    request_lines = [ f"{flask_request.method} {flask_request.path} {flask_request.environ['SERVER_PROTOCOL']}" ]
+    
+    for key, value in flask_request.headers:
+        request_lines.append(f"{key}: {value}")
+    
+    if flask_request.form:
+        request_lines.append(" ")
+        request_lines.append(urllib.parse.urlencode(flask_request.form, doseq=False))
+
+    return "\n".join(request_lines)
 
 
 if __name__ == "__main__":
