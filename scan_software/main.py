@@ -16,7 +16,7 @@ def main():
 @app.route("/", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
 def handle_request(url=""):
     text_to_check = ""
-
+        
     # Check the request's methods and act accordingly (because the request data (that we want to scan) is in different places):
     if flask.request.method in [ "GET", "HEAD", "DELETE" ]:
         text_to_check = flask.request.args
