@@ -1,6 +1,8 @@
 import flask
 
 from datetime import datetime
+from werkzeug.datastructures import ImmutableMultiDict
+import urllib.parse
 
 # Attack defense modules:
 import xss
@@ -12,6 +14,18 @@ app = flask.Flask(__name__)  # Define the Flask app's name.
 db = waf_database.MongoDB("127.0.0.1", 27017)
 MAX_NUM_OF_ATTACKS = 3
 
+def request_to_raw(flask_request):
+    request_lines = [ f"{flask_request.method} {flask_request.path} {flask_request.environ['SERVER_PROTOCOL']}" ]
+    
+    for key, value in flask_request.headers:
+        request_lines.append(f"{key}: {value}")
+    
+    if flask_request.form:
+        request_lines.append(" ")
+        request_lines.append(urllib.parse.urlencode(flask_request.form, doseq=False))
+
+    return "\n".join(request_lines)
+    
 def main():
     # Start the Flask app:
     app.run(host="0.0.0.0", port=3333)
@@ -29,8 +43,8 @@ def handle_request(url=""):
     # Define some variables that relates to the request properties:
     client_ip = flask.request.environ.get("REMOTE_ADDR")
     client_port = flask.request.environ.get("REMOTE_PORT")
-    raw_http_request = flask.request.data.decode("utf-8")
-
+    raw_request = request_to_raw(flask.request)
+    
     # If the client's IP is blocked, return BLACKLIST{...} string:
     if db.is_blocked(client_ip):
         attacks_performed = db.get_attacks_performed(client_ip)
@@ -48,16 +62,16 @@ def handle_request(url=""):
     
     # Check if the request is dangerous and save the results to a tuple of (<name_of_detected_attack>, <where_the_attack_was_found>) [If safe: ("Safe", None)]:
     (attack_detected, blocked_text) = check_for_vulnerabilities(text_to_check)
-
+    
     # If no attack detected, add the request to the DB and return "ALLOW":
     if (attack_detected == "Safe"):
-        db.add_to_incoming_requests(client_ip, client_port, raw_http_request, True, "", datetime.now())
+        db.add_to_incoming_requests(client_ip, client_port, raw_request, True, "", datetime.now())
         return "ALLOW"
 
     # If attack detected, add the request to the DB as a dangerous request.
     #  Then, add/edit the Blacklist and return BLOCK{...} or BLACKLIST{...} (if the client performed 3 attacks).
     else:
-        db.add_to_incoming_requests(client_ip, client_port, raw_http_request, False, attack_detected, datetime.now())
+        db.add_to_incoming_requests(client_ip, client_port, raw_request, False, attack_detected, datetime.now())
         
         # If the client is in the Blacklist, edit his entry to be one more attack then before (unless he reached 3 attacks):
         if db.is_in_blacklist(client_ip):
@@ -90,25 +104,11 @@ def check_for_vulnerabilities(request_data):
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
-        #return f'BLOCK{{"attack_name":"XSS Attack", "blocked_text":"{xss_text}", "count":3}}'
         return ("XSS Attack", xss_text)
     else:
         return ("Safe", None)
-        #return "ALLOW"
 
 
-# def burn_attacker(ip_address, attack_name):
-    
-#     if (check_for_vulnerabilities() == "ALLOW"):
-#         db.add_to_incoming_requests(ip_address, flask.request.environ.get("REMOTE_PORT"), request.data.decode("utf-8"))
-#     #Check if the attacker is in the blacklist
-#    if not db.is_in_blackList(ip_address):
-#         db.add_to_blacklist(ip_address, attack_name, 1, False)
-        
-#    else:
-       
-# def safe_message():
-#     db.add_to_incoming_requests(ip_address, flask.request.environ.get("REMOTE_PORT"), request.data.decode("utf-8"))
 if __name__ == "__main__":
     main()
     

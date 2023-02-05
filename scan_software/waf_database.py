@@ -91,27 +91,8 @@ class MongoDB:
             "IP Address": ip_address, 
         }
         return self.__db["Blacklist"].find_one(entry_to_find)
-   
-   
-    def find_in_incoming_packets(self, client_ip, client_port):
-        """
-        Return all entries from "IncomingRequests" collection, by the given IP.
-        
-        Args:
-            client_ip (str): Client's IP Address, the IP address we want to find.
-            client_port (int): Client's port, the port we want to find.
-
-        Returns:
-            _type_: dictionary - The entries that we found.
-        """
-        
-        # Define the entry we want to find in "Incoming Packets" collection, and return the result:
-        entry_to_find = {
-            "Client IP": client_ip, 
-            "Client Port": client_port
-        }
-        return self.__db["IncomingPackets"].find(entry_to_find)
     
+
     def get_attacks_performed(self, ip_address):
         """
         Function that returns the attacks that the user preformed.
@@ -180,6 +161,7 @@ class MongoDB:
         }
         self.__db["Blacklist"].delete_one(entry_to_delete)
         
+
     def is_in_blacklist(self, ip_address):
         """
         Check if the given IP is in the "Blacklist" collection.
