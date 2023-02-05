@@ -14,6 +14,17 @@ select * from users where id  =  1 +$+ or 1  =  1 -- 1,1
 admin' or 1  =  1#,1
 " select * from users where id  =  1 or ""  (  ]"" or 1  =  1 -- 1",1
 or 1  =  1 --,1
+exec, 0
+execute 2, 0
+exec user, 0
+entry exec, 0
+exec 4r, 0
+exec exec, 0
+execute, 0
+exec command, 0
+exec file, 0
+exec_this, 0
+exec_username, 0
 " AND 1  =  utl_inaddr.get_host_address   (    (   SELECT DISTINCT  (  column_name  )   FROM   (  SELECT DISTINCT  (  column_name  )  , ROWNUM AS LIMIT FROM all_tab_columns  )   WHERE LIMIT  =  5   )    )    AND 'i'  =  'i",1
 " select * from users where id  =  '1' %!<@ union select 1,version  (    )   -- 1'",1
 " select * from users where id  =  1 or ""&  (  "" or 1  =  1 -- 1",1
