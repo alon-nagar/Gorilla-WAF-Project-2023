@@ -53,13 +53,28 @@ async function main(r)
 
 		else if (vulnerability_status.includes("BLACKLIST"))
 		{
-			// TODO: BLACKLIST blocking...
+			// Example for the JSON string from the Python Flask server:
+			// BLACKLIST { 
+			// 	"attacks_performed": "XSS Attack, SQL Injection, LFI/RFI"  --> The attacks that the current client pefromed.
+			// }
+			
+			// Parse the JSON string from the Python Flask server:
+			let json_str = vulnerability_status.split("BLACKLIST")[1];
+			let json_obj = JSON.parse(json_str);
+			
+			// Parse the necessary data from the JSON string, to pass to the 'block_blacklisted' page:
+			let attacks_performed = json_obj.attacks_performed;
+
+			// Parse the data to a block_blacklisted page, and return it to the client:
+			let block_blacklisted_page = `/block_blacklisted.html?attacks_performed=${attacks_performed}`;
+
+			r.return(302, block_blacklisted_page);
 		}
 
 		// If the response is something else, throw an error:
 		else
 		{
-			throw "Something went wrong with Gorilla's system..."
+			throw "It's not you, it us. Something went wrong with Gorilla's system..."
 		}
 	}
 	catch (error_msg)
