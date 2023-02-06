@@ -4,6 +4,7 @@ import urllib.parse
 
 # Attack defense modules:
 import xss
+import sql_injection.sqli
 
 # Import other custom modules:
 import waf_database
@@ -24,6 +25,12 @@ def main():
 def handle_request(url=""):
 
     text_to_check = ""
+    
+
+    try:
+        print(flask.request.environ.get("REMOTE_ADDR"))
+    except Exception as e:
+        print("Error: " + str(e))
 
     # Define some variables that relates to the request properties:
     client_ip = flask.request.environ.get("REMOTE_ADDR")
@@ -85,10 +92,14 @@ def check_for_vulnerabilities(request_data):
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
     (is_xss, xss_text) = xss.is_request_xss(request_data)
+    (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
         return ("XSS Attack", xss_text)
+    if is_sqli:
+        sqli_text = sqli_text.replace('"', '\\"')
+        return ("SQL Injection Attack", sqli_text)
     else:
         return ("Safe", None)
 
