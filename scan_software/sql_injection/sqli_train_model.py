@@ -26,12 +26,11 @@ from sklearn.svm import LinearSVC                    # For Support Vector Machin
 # Export/Import model [dump/load]:
 import pickle
 
-
 # Read CSV file into Pandas DataFrame:
-data = pd.read_csv("Modified_SQL_Dataset.csv")  # Source: https://www.kaggle.com/datasets/sajid576/sql-injection-dataset
+data = pd.read_csv("sqli-extended.csv")  # Source: https://www.kaggle.com/datasets/sajid576/sql-injection-dataset
 
 # Extract Queries and Labels: 0 = Not SQL, 1 = SQLi.
-queries = data["Query"].tolist()
+queries = data["Sentence"].tolist()
 labels = data["Label"].tolist()
 
 # Convert text data into numerical features ("vectorization"):
@@ -62,6 +61,12 @@ for model, model_name in zip(models, models_names):
 model = LinearSVC()   # Define the best model [Support Vector Machine].
 model.fit(X, labels)  # Train model
 
+while True:
+    x = input("Enter: ")
+    print(model.predict(vectorizer.transform([x])))
+
+"""
 # Export model&vectorizer to a file called "ml_sqli_model.pickle" and "vectorizer_ml_sqli_model.pickle":
 pickle.dump(model, open("ml_sqli_model.pickle", "wb"))
 pickle.dump(vectorizer, open("vectorizer_ml_sqli_model.pickle", "wb"))
+"""
