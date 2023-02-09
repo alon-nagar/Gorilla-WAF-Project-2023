@@ -5,6 +5,7 @@ import urllib.parse
 # Attack defense modules:
 import xss
 import sql_injection.sqli
+import HTTP_Parameter_Pollution
 
 # Import other custom modules:
 import waf_database
@@ -94,12 +95,18 @@ def check_for_vulnerabilities(request_data):
     (is_xss, xss_text) = xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     
+    (is_HPP, HPP_text) = HTTP_Parameter_Pollution.is_request_hpp(request_data, flask.request.url)
+    
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
         return ("XSS Attack", xss_text)
-    if is_sqli:
-        sqli_text = sqli_text.replace('"', '\\"')
-        return ("SQL Injection Attack", sqli_text)
+    elif is_HPP:
+        HPP_text = HPP_text.replace('"', '\\"')
+        return ("HTTP Parameter Pollution Attack", HPP_text)
+    # elif is_sqli:
+    #     sqli_text = sqli_text.replace('"', '\\"')
+    #     return ("SQL Injection Attack", sqli_text)
+
     else:
         return ("Safe", None)
 
