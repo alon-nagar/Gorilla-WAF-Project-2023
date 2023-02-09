@@ -29,7 +29,6 @@ def is_text_hpp(text):
     """
     print (text)
     if "=" in text and "&" in text:
-        if "//" in text or "?" in text:   
-            return (True, f"HTTP Parameter Pollution detected in param: {text}")
+        return (True, f"HTTP Parameter Pollution detected in param: {text}")
         
     return (False, None)
