@@ -1,5 +1,5 @@
 ![image](https://user-images.githubusercontent.com/74711093/219436570-8c0c7a2d-805e-418a-918e-7a3b9e8e6bd8.png)
-# Gorilla-WAF-Project-2023
+# Gorilla - _Your Web-App's Bodyguard_
 ## About us
 **_Gorilla_** is a powerfull Web-Application Firewall (WAF), that detect and block different web attacks. <br>
 It communicates with a local database with MongoDB, that has the blocked attackers by their IP address. 
