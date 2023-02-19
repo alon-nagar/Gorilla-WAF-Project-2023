@@ -27,7 +27,6 @@ def is_text_hpp(text):
         Returns:
             tuple(bool, str): A tuple of (True/False - HPP detected, str - The string where HPP was detected).
     """
-    print (text)
     if "=" in text and "&" in text:
         return (True, f"HTTP Parameter Pollution detected in param: {text}")
         
