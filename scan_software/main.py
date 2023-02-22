@@ -3,16 +3,17 @@ from datetime import datetime
 import urllib.parse
 
 # Attack defense modules:
-import xss
+import cross_site_scripting.xss
 import sql_injection.sqli
-import HTTP_Parameter_Pollution
+import hpp
+import ssi_injection
 
 # Import other custom modules:
 import waf_database
 
 # Define the Flask app and the database:
-app = flask.Flask(__name__)  # Define the Flask app's name.
-db = waf_database.MongoDB("127.0.0.1", 27017)
+app = flask.Flask(__name__)
+db = waf_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
     
     
 def main():
@@ -26,12 +27,6 @@ def main():
 def handle_request(url=""):
 
     text_to_check = ""
-    
-
-    try:
-        print(flask.request.environ.get("REMOTE_ADDR"))
-    except Exception as e:
-        print("Error: " + str(e))
 
     # Define some variables that relates to the request properties:
     client_ip = flask.request.environ.get("REMOTE_ADDR")
@@ -92,21 +87,23 @@ def check_for_vulnerabilities(request_data):
     Returns:
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
-    (is_xss, xss_text) = xss.is_request_xss(request_data)
-    #(is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
-    
-    (is_HPP, HPP_text) = HTTP_Parameter_Pollution.is_request_hpp(request_data, flask.request.args)
-    
+    (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
+    (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
+    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
+    (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
+
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
-        return ("XSS Attack", xss_text)
-    elif is_HPP:
-        HPP_text = HPP_text.replace('"', '\\"')
-        return ("HTTP Parameter Pollution Attack", HPP_text)
-    # elif is_sqli:
-    #     sqli_text = sqli_text.replace('"', '\\"')
-    #     return ("SQL Injection Attack", sqli_text)
-
+        return ("XSS / HTML Injection Attack", xss_text)
+    if is_sqli:
+        sqli_text = sqli_text.replace('"', '\\"')
+        return ("SQL Injection Attack", sqli_text)
+    elif is_hpp:
+        hpp_text = hpp_text.replace('"', '\\"')
+        return ("HTTP Parameter Pollution Attack", hpp_text)
+    elif is_ssii:
+        ssii_text = ssii_text.replace('"', '\\"')
+        return ("SSI Injection Attack", ssii_text)  
     else:
         return ("Safe", None)
 

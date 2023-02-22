@@ -42,7 +42,6 @@ def is_text_sqli(text):
     Returns:
         bool: True - SQLi detected, False - Safe string.
     """
-    print("Text:", text)
     if len(text) > 0:  # To avoid `ValueError: empty vocabulary; perhaps the documents only contain stop words`
         return sqli_detection_model.predict(vectorizer.transform([text]))[0] == 1
     
