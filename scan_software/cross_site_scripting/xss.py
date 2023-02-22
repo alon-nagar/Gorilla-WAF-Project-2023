@@ -1,3 +1,8 @@
+xss_keywords_list = []
+
+with open("cross_site_scripting/xss_keywords.txt", "r") as xss_keywords_file:
+    xss_keywords_list = xss_keywords_file.read().splitlines()  # Read each line and append it to the liss (without the '\n' character).
+    
 def is_request_xss(request_data):
     """Function to check if a request contains XSS (Cross-Site Scripting) characters.
 
@@ -24,4 +29,8 @@ def is_text_xss(text):
     Returns:
         bool: True - XSS detected, False - Safe string.
     """
-    return any(danger_char in text.lower() for danger_char in ["<", ">", "&lt;", "&gt;"])
+    text = text.replace(" ", "").replace("\n", "").replace("\t", "")  # Remove all spaces, new lines and tabs.
+    text = text.lower()                                               # Convert the string to lower case.
+    
+    # If the text to check contains one of the XSS keywords (from the 'xss_keywords_list'), return True:
+    return any(xss_keyword in text for xss_keyword in xss_keywords_list)
