@@ -3,9 +3,10 @@ from datetime import datetime
 import urllib.parse
 
 # Attack defense modules:
-import xss
+import cross_site_scripting.xss
 import sql_injection.sqli
 import hpp
+import ssi_injection
 
 # Import other custom modules:
 import waf_database
@@ -86,19 +87,23 @@ def check_for_vulnerabilities(request_data):
     Returns:
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
-    (is_xss, xss_text) = xss.is_request_xss(request_data)
+    (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
-    
+    (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
+
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
-        return ("XSS Attack", xss_text)
-    elif is_sqli:
+        return ("XSS / HTML Injection Attack", xss_text)
+    if is_sqli:
         sqli_text = sqli_text.replace('"', '\\"')
         return ("SQL Injection Attack", sqli_text)
     elif is_hpp:
         hpp_text = hpp_text.replace('"', '\\"')
         return ("HTTP Parameter Pollution Attack", hpp_text)
+    elif is_ssii:
+        ssii_text = ssii_text.replace('"', '\\"')
+        return ("SSI Injection Attack", ssii_text)  
     else:
         return ("Safe", None)
 
