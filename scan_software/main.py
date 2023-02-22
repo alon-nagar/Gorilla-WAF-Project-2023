@@ -93,9 +93,9 @@ def check_for_vulnerabilities(request_data):
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
     (is_xss, xss_text) = xss.is_request_xss(request_data)
-    (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
+    #(is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     
-    (is_HPP, HPP_text) = HTTP_Parameter_Pollution.is_request_hpp(request_data)
+    (is_HPP, HPP_text) = HTTP_Parameter_Pollution.is_request_hpp(request_data, flask.request.args)
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
