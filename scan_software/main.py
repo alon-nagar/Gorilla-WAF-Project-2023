@@ -28,9 +28,8 @@ def handle_request(url=""):
 
     text_to_check = ""
 
-    # Define some variables that relates to the request properties:
-    client_ip = flask.request.environ.get("REMOTE_ADDR")
-    client_port = flask.request.environ.get("REMOTE_PORT")
+    # Define the real client's IP and the raw request (for saving to the DB):
+    client_ip = flask.request.headers.get("X-Forwarded-For", "0.0.0.0")
     raw_request = request_to_raw(flask.request)
     
     # If the client's IP is blocked, return BLACKLIST{...} string:
@@ -53,13 +52,13 @@ def handle_request(url=""):
     
     # If no attack detected, add the request to the DB and return "ALLOW":
     if (attack_detected == "Safe"):
-        db.add_to_incoming_requests(client_ip, client_port, raw_request, True, "", datetime.now())
+        db.add_to_incoming_requests(client_ip, raw_request, True, "", datetime.now())
         return "ALLOW"
 
     # If attack detected, add the request to the DB as a dangerous request.
     #  Then, add/edit the Blacklist and return BLOCK{...} or BLACKLIST{...} (if the client performed 3 attacks).
     else:
-        db.add_to_incoming_requests(client_ip, client_port, raw_request, False, attack_detected, datetime.now())
+        db.add_to_incoming_requests(client_ip, raw_request, False, attack_detected, datetime.now())
         
         # If the client is in the Blacklist, edit his entry to be one more attack then before (unless he reached 3 attacks):
         if db.is_in_blacklist(client_ip):

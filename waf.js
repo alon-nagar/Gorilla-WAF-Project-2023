@@ -9,10 +9,15 @@ async function main(r)
 			url += "?" + dict_to_uri_parameters_string(r.args);
 		}
 
-		// Send the client's \request for vulnerability scanning (to the Python Flask server on port 3333):
+		// Assign the real client's IP to the headers sent to the Python Flask server:
+		let headers = Object.assign({}, r.headersIn, {
+			"X-Forwarded-For": r.remoteAddress,
+		});
+
+		// Send the client's request for vulnerability scanning (to the Python Flask server on port 3333):
         let reply = await ngx.fetch(url, {
         	method: r.method,
-        	headers: r.headersIn,
+        	headers: headers,
         	body: r.requestText
         });
 
@@ -100,5 +105,6 @@ function dict_to_uri_parameters_string(obj)
 	
 	return str.join("&");
 }
+
 
 export default { main };
