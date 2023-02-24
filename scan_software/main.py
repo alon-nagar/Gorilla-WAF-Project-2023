@@ -13,7 +13,7 @@ import waf_database
 
 # Define the Flask app and the database:
 app = flask.Flask(__name__)
-db = waf_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
+db = waf_database.MongoDB("127.0.0.1", 27017)  # Alon's IP: 172.17.0.2
     
     
 def main():
@@ -89,7 +89,7 @@ def check_for_vulnerabilities(request_data):
     """
     (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
-    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
+    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, flask.request.url)
     (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
 
     if is_xss:
