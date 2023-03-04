@@ -6,13 +6,14 @@ import urllib.parse
 import xss
 import sql_injection.sqli
 import hpp
+import http_host_header
 
 # Import other custom modules:
 import waf_database
 
 # Define the Flask app and the database:
 app = flask.Flask(__name__)
-db = waf_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
+db = waf_database.MongoDB("127.0.0.1", 27017)  # Alon's IP: 172.17.0.2
     
     
 def main():
@@ -89,7 +90,8 @@ def check_for_vulnerabilities(request_data):
     (is_xss, xss_text) = xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
-    
+    (is_host_header, host_header_text) = http_host_header.is_request_http_host_header(flask.request.headers)
+    #print(flask.request.headers.get('Host'))
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
         return ("XSS Attack", xss_text)
@@ -99,6 +101,8 @@ def check_for_vulnerabilities(request_data):
     elif is_hpp:
         hpp_text = hpp_text.replace('"', '\\"')
         return ("HTTP Parameter Pollution Attack", hpp_text)
+    elif is_host_header:
+        return ("Host Header Attack", host_header_text)
     else:
         return ("Safe", None)
 
