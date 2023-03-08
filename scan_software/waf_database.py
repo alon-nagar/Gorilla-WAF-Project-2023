@@ -51,13 +51,12 @@ class MongoDB:
         self.__db["Blacklist"].insert_one(entry_to_add)
         
         
-    def add_to_incoming_requests(self, client_ip, client_port, content, is_safe, name_of_attack, time):
+    def add_to_incoming_requests(self, client_ip, content, is_safe, name_of_attack, time):
         """
         Add new entry to the "IncomingRequests" collection, including all the information needed.
         
         Args:
             client_ip (str): Source IP, Client's IP.
-            client_port (int): Source port, Client's Port.
             content (str): The HTTP message (Only application level).
             is_safe (bool): True if the packet is safe, False if not (in case of attack).
             name_of_attack (str): Attack's name (If packet is safe - leave empty).
@@ -67,7 +66,6 @@ class MongoDB:
         # Define the entry that we want to add to the collection, and add it:
         entry_to_add = {
             "Client's IP": client_ip,
-            "Client's Port": client_port,
             "HTTP Request": content ,
             "Is Safe": is_safe, 
             "Name of Attack": name_of_attack,

@@ -3,11 +3,12 @@ from datetime import datetime
 import urllib.parse
 
 # Attack defense modules:
-import xss
+import cross_site_scripting.xss
 import sql_injection.sqli
 import hpp
 import http_host_header
 import open_redirect
+import ssi_injection
 
 # Import other custom modules:
 import waf_database
@@ -29,9 +30,8 @@ def handle_request(url=""):
 
     text_to_check = ""
 
-    # Define some variables that relates to the request properties:
-    client_ip = flask.request.environ.get("REMOTE_ADDR")
-    client_port = flask.request.environ.get("REMOTE_PORT")
+    # Define the real client's IP and the raw request (for saving to the DB):
+    client_ip = flask.request.headers.get("X-Forwarded-For", "0.0.0.0")
     raw_request = request_to_raw(flask.request)
     
     # If the client's IP is blocked, return BLACKLIST{...} string:
@@ -54,13 +54,13 @@ def handle_request(url=""):
     
     # If no attack detected, add the request to the DB and return "ALLOW":
     if (attack_detected == "Safe"):
-        db.add_to_incoming_requests(client_ip, client_port, raw_request, True, "", datetime.now())
+        db.add_to_incoming_requests(client_ip, raw_request, True, "", datetime.now())
         return "ALLOW"
 
     # If attack detected, add the request to the DB as a dangerous request.
     #  Then, add/edit the Blacklist and return BLOCK{...} or BLACKLIST{...} (if the client performed 3 attacks).
     else:
-        db.add_to_incoming_requests(client_ip, client_port, raw_request, False, attack_detected, datetime.now())
+        db.add_to_incoming_requests(client_ip, raw_request, False, attack_detected, datetime.now())
         
         # If the client is in the Blacklist, edit his entry to be one more attack then before (unless he reached 3 attacks):
         if db.is_in_blacklist(client_ip):
@@ -88,16 +88,18 @@ def check_for_vulnerabilities(request_data):
     Returns:
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
-    (is_xss, xss_text) = xss.is_request_xss(request_data)
+    (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
     (is_host_header, host_header_text) = http_host_header.is_request_http_host_header(flask.request.headers)
     (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(flask.request.url)
-    #print(flask.request.headers.get('Host'))
+    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, flask.request.url)
+    (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
+
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
-        return ("XSS Attack", xss_text)
-    elif is_sqli:
+        return ("XSS / HTML Injection Attack", xss_text)
+    if is_sqli:
         sqli_text = sqli_text.replace('"', '\\"')
         return ("SQL Injection Attack", sqli_text)
     elif is_hpp:
@@ -107,6 +109,9 @@ def check_for_vulnerabilities(request_data):
         return ("Host Header Attack", host_header_text)
     elif is_open_redirect:
         return ("Open Redirect Attack", open_redirect_text)
+    elif is_ssii:
+        ssii_text = ssii_text.replace('"', '\\"')
+        return ("SSI Injection Attack", ssii_text)  
     else:
         return ("Safe", None)
 
