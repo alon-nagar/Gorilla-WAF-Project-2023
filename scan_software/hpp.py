@@ -1,4 +1,4 @@
-def is_request_hpp(request_data):
+def is_request_hpp(request_data, url):
     """
         Function to check if a request contains HTTP Parameter Pollution (HPP).
           First, it checks for HPP in the parameters when entered in the URL directly.
@@ -13,7 +13,7 @@ def is_request_hpp(request_data):
         
     """
     
-    is_url_safe = is_url_hpp(request_data)
+    is_url_safe = is_url_hpp(url)
     if is_url_safe != (False, None):
         return is_url_safe
     
@@ -44,29 +44,35 @@ def is_text_hpp(text, args):
 
 
 
-def is_url_hpp(args):
+
+def is_url_hpp(url):
     """
-    Check if the given args contains HTTP Parameter Pollution (HPP) queries.
+    Check if the given URL contains HTTP Parameter Pollution (HPP) queries.
 
     Args:
-        args (ImmutableMultiDict): The query parameters to check.
+        url (str): The URL to check.
 
     Returns:
         tuple: A tuple of (bool - True if HPP detected, str - The parameter name with HPP, or None if not detected).
     """
-    
-    print("ARGS: ", args)
-    param_names = []
-    param_values = []
-    
-    for name, value in args.items():
-        param_names.append(name)
-        param_values.extend(value.split(","))
-
-    if len(param_values) > len(set(param_names)):
-        for name in param_names:
-            if param_values.count(name) > 1:
-                return (True, name)
-        return (True, param_names[0])
-    else:
+    url_parts = url.split("?")
+    if len(url_parts) < 2:
         return (False, None)
+
+    params = url_parts[1].split("&")
+    param_dict = {}
+    hpp_param = None
+    for p in params:
+        if "=" not in p:
+            continue
+        name, value = p.split("=")
+        if name in param_dict:
+            param_dict[name].append(value)
+        else:
+            param_dict[name] = [value]
+
+        if len(param_dict[name]) > 1 or any("%2C" in v for v in param_dict[name]):
+            hpp_param = name
+            break
+
+    return (True if hpp_param else False, hpp_param)
