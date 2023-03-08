@@ -6,7 +6,7 @@ import urllib.parse
 import cross_site_scripting.xss
 import sql_injection.sqli
 import hpp
-import http_host_header
+import http_host_header_injection
 import open_redirect
 import ssi_injection
 
@@ -90,8 +90,7 @@ def check_for_vulnerabilities(request_data):
     """
     (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
-    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
-    (is_host_header, host_header_text) = http_host_header.is_request_http_host_header(flask.request.headers)
+    (is_host_header, host_header_text) = http_host_header_injection.is_request_http_host_header(flask.request.headers)
     (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(flask.request.url)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, flask.request.url)
     (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
@@ -106,7 +105,7 @@ def check_for_vulnerabilities(request_data):
         hpp_text = hpp_text.replace('"', '\\"')
         return ("HTTP Parameter Pollution Attack", hpp_text)
     elif is_host_header:
-        return ("Host Header Attack", host_header_text)
+        return ("Host Header Injection Attack", host_header_text)
     elif is_open_redirect:
         return ("Open Redirect Attack", open_redirect_text)
     elif is_ssii:
