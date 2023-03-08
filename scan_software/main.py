@@ -7,6 +7,7 @@ import xss
 import sql_injection.sqli
 import hpp
 import http_host_header
+import open_redirect
 
 # Import other custom modules:
 import waf_database
@@ -91,6 +92,7 @@ def check_for_vulnerabilities(request_data):
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data)
     (is_host_header, host_header_text) = http_host_header.is_request_http_host_header(flask.request.headers)
+    (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(flask.request.url)
     #print(flask.request.headers.get('Host'))
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
@@ -103,6 +105,8 @@ def check_for_vulnerabilities(request_data):
         return ("HTTP Parameter Pollution Attack", hpp_text)
     elif is_host_header:
         return ("Host Header Attack", host_header_text)
+    elif is_open_redirect:
+        return ("Open Redirect Attack", open_redirect_text)
     else:
         return ("Safe", None)
 
