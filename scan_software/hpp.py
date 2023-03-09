@@ -1,7 +1,7 @@
 def is_request_hpp(request_data, url):
     """
         Function to check if a request contains HTTP Parameter Pollution (HPP).
-          First, it checks for HPP in the parameters when entered in the URL directly.
+          First, it checks for HPP in the parameters when entered in the URL directly
           Then, it checks for HPP in the parameters when entered in a input field.
         
         Args:

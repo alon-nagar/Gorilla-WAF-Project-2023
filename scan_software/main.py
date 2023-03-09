@@ -46,11 +46,14 @@ def handle_request(url=""):
     elif flask.request.method in [ "POST", "PUT", "PATCH" ]:
         text_to_check = flask.request.form
     
+    elif flask.request.method == "TRACE":
+        text_to_check = ""
+        
     else:
         return f'BLOCK{{"attack_name": "Unsupported Request Method", "blocked_text": "HTTP Request", "count": 0}}'
     
     # Check if the request is dangerous and save the results to a tuple of (<name_of_detected_attack>, <where_the_attack_was_found>) [If safe: ("Safe", None)]:
-    (attack_detected, blocked_text) = check_for_vulnerabilities(text_to_check)
+    (attack_detected, blocked_text) = check_for_vulnerabilities(text_to_check, flask.request)
     
     # If no attack detected, add the request to the DB and return "ALLOW":
     if (attack_detected == "Safe"):
@@ -79,7 +82,7 @@ def handle_request(url=""):
             return f'BLOCK{{"attack_name": "{attack_detected}", "blocked_text": "{blocked_text}", "count" : 2}}'
 
 
-def check_for_vulnerabilities(request_data):
+def check_for_vulnerabilities(request_data, full_request):
     """Function to check for vulnerabilities in the request data. If found, it return a BLOCK response.
 
     Args:
@@ -90,9 +93,9 @@ def check_for_vulnerabilities(request_data):
     """
     (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
     (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
-    (is_host_header, host_header_text) = http_host_header_injection.is_request_http_host_header(flask.request.headers)
-    (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(flask.request.url)
-    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, flask.request.url)
+    (is_hhi, hhi_text) = http_host_header_injection.is_request_http_host_header(full_request.headers)
+    (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(full_request.url)
+    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, full_request.url)
     (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
 
     if is_xss:
@@ -104,8 +107,8 @@ def check_for_vulnerabilities(request_data):
     elif is_hpp:
         hpp_text = hpp_text.replace('"', '\\"')
         return ("HTTP Parameter Pollution Attack", hpp_text)
-    elif is_host_header:
-        return ("Host Header Injection Attack", host_header_text)
+    elif is_hhi:
+        return ("Host Header Injection Attack", hhi_text)
     elif is_open_redirect:
         return ("Open Redirect Attack", open_redirect_text)
     elif is_ssii:
