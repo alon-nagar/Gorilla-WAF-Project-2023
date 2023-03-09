@@ -13,11 +13,16 @@ def is_request_hpp(request_data, url):
         
     """
     
+    # Send the request URL to the function that checks it.
     is_url_safe = is_url_hpp(url)
+    
+    # Check if the URL is safe.
     if is_url_safe != (False, None):
         return is_url_safe
     
+    # Check if the request data contains HPP.
     for param_name, param_value in request_data.items():
+        # Send the request data to the function that checks it.
         if is_text_hpp(param_value, request_data) != (False, None):
             return (True, param_name)
         

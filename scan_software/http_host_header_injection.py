@@ -5,10 +5,16 @@ MAX_LEN = 1
 def is_request_http_host_header(headers):
     """
     Function to check if a request contains a Host header injection attack.
+    Args:
+        headers (werkzeug.datastructures.Headers): The headers of the request.
+        
+    Returns:
+        tuple: (True, header_name) if the request contains a Host header injection attack, (False, None) otherwise.
     """
     # Check for the Host header and headers with similar purposes
     header_names = ['Host', 'X-Forwarded-Host', 'X-Host', 'X-Forwarded-Server', 'X-HTTP-Host-Override', 'Forwarded']
     for header_name in header_names:
+        # Get all the values of the header
         header_values = headers.getlist(header_name)
         
         # Check for duplicates
