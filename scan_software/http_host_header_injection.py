@@ -3,9 +3,10 @@ import re
 def is_request_http_host_header(request_headers):
     """
         Function to check if a request contains a Host Header injection attack.
-        A Host Header Injection (HHI) attack occurs when an attacker modifies the value of the Host header to include malicious
-        code or characters, such as line breaks or null characters, which can allow the attacker to bypass security controls.
-        
+          HTTP Host Header Injection (HHI) attack occurs when:
+            1. Multiple Host headers in the same HTTP request.
+            2. Multiple hosts in the same Host header (like: "Host: www.google.con\\nwww.samsung.com").
+
         Args:
             request_headers (werkzeug.datastructures.Headers): The HTTP request's headers.
             
@@ -15,6 +16,11 @@ def is_request_http_host_header(request_headers):
     
     # Define the headers to check for HHI attacks (there are several headers that can be used to set the Host header):
     host_header_names = ['Host', 'X-Forwarded-Host', 'X-Host', 'X-Forwarded-Server', 'X-HTTP-Host-Override', 'Forwarded']
+    
+    # Check if there are more than one host header (all kinds) in the request (HHI attack):
+    host_headers_in_request = set(host_header_names).intersection(set(request_headers.keys()))
+    if (host_headers_in_request > 1):
+        return (True, f"{host_headers_in_request}: {request_headers.getlist(host_headers_in_request)}")
     
     # For each header name, get all the values of the header and check them for HHI attacks
     for curr_host_header in host_header_names:
@@ -26,16 +32,13 @@ def is_request_http_host_header(request_headers):
         if len(host_headers_values) > 1:
             return (True, f"{curr_host_header}: {host_headers_values}")
         
-        # If there is no header value, move to the next header name:
-        if len(host_headers_values) == 0:
-            continue
+        # If no header in the "curr_host_header" was found, continue to the next header name:
+        if len(host_headers_values) != 0:
+            host_header_to_check = host_headers_values[0]  # Get the header value to check for HHI attacks
+            
+            # Check if the header value contains any illegal characters or patterns that might indicate an HHI attack (like '\n'):
+            if not re.match(r'^[a-zA-Z0-9.\-:%]+\Z', host_header_to_check):
+                return (True, f"{curr_host_header}: {host_header_to_check}")
         
-        # Get the header value to check for HHI attacks:
-        host_header_to_check = host_headers_values[0]
-        
-        # Check if the header value contains any illegal characters or patterns that might indicate an HHI attack:
-        if not re.match(r'^[a-zA-Z0-9.\-:%]+\Z', host_header_to_check):
-            return (True, f"{curr_host_header}: {host_header_to_check}")
-        
-    # If no HHI attack was detected in any of the headers, return False:
+    # If passed all the checks, return False (not HHI):
     return (False, None)
