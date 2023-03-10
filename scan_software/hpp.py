@@ -5,7 +5,7 @@ def is_request_hpp(request_data, url):
           Then, it checks for HPP in the parameters when entered in a input field.
         
         Args:
-            request_data (str): A JSON string of the request data [For example: {"username": "admin", "password": "<script>alert(1);</script>"}].
+            request_data (str): A JSON string of the request data.
             args (ImmutableMultiDict): The query parameters to check.
         
         Returns:
@@ -39,11 +39,12 @@ def is_text_hpp(text, args):
         Returns:
             tuple(bool, str): A tuple of (True/False - HPP detected, str - The string where HPP was detected).
     """
-
+    # Loop through all the keys and values in the query parameters.
     for key, value in args.items():
-        print (key)
+        # Check if the parameter key is present in the text.
         if ("&" + key + "=") in text:
-            return (True, f"HTTP Parameter Pollution detected in param: {text})")
+            # Return a tuple indicating that HPP was detected and the parameter name with HPP.
+            return (True, f"{text}")
 
     return (False, None)
 
@@ -60,24 +61,43 @@ def is_url_hpp(url):
     Returns:
         tuple: A tuple of (bool - True if HPP detected, str - The parameter name with HPP, or None if not detected).
     """
+    
+    # Split the URL into two parts: the part before the query string and the part after.
     url_parts = url.split("?")
+    
+    # If the URL has no query string, return False and None.
     if len(url_parts) < 2:
         return (False, None)
 
+    # Split the query string into individual parameters.
     params = url_parts[1].split("&")
+    
+    # Create an empty dictionary to hold the parameters.
     param_dict = {}
     hpp_param = None
+    
+    
     for p in params:
+
+        # If the parameter doesn't contain an equals sign, skip it meaning that it can't be a parameter.
         if "=" not in p:
             continue
+        
+        # Split the parameter into its name and value.
         name, value = p.split("=")
+        
+        # If the parameter is already in the dictionary, append the value to its list.
+        # Otherwise, add the parameter and its value to the dictionary.
         if name in param_dict:
             param_dict[name].append(value)
         else:
             param_dict[name] = [value]
-
+            
+        # If the parameter appears more than once or contains the string "%2C",
+        # it may indicate HPP, so set the HPP parameter to the current name and break the loop.
         if len(param_dict[name]) > 1 or any("%2C" in v for v in param_dict[name]):
             hpp_param = name
             break
-
+        
+    # Return True and the name of the HPP parameter if one was found, or False and None otherwise.
     return (True if hpp_param else False, hpp_param)
