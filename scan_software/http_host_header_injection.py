@@ -19,7 +19,7 @@ def is_request_http_host_header(request_headers):
     
     # Check if there are more than one host header (all kinds) in the request (HHI attack):
     host_headers_in_request = set(host_header_names).intersection(set(request_headers.keys()))
-    if (host_headers_in_request > 1):
+    if len(host_headers_in_request) > 1:
         return (True, f"{host_headers_in_request}: {request_headers.getlist(host_headers_in_request)}")
     
     # For each header name, get all the values of the header and check them for HHI attacks

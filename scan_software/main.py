@@ -15,7 +15,7 @@ import waf_database
 
 # Define the Flask app and the database:
 app = flask.Flask(__name__)
-db = waf_database.MongoDB("127.0.0.1", 27017)  # Alon's IP: 172.17.0.2
+db = waf_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
     
     
 def main():
