@@ -8,6 +8,8 @@ def is_request_xst(full_request):
 
     Returns:
         bool: True if the request contains XST attack, False otherwise.
+        tuple(bool, str): A tuple of (True/False - XST detected, str - The string where XST was detected [first request's line]).
+
     """
     
-    return full_request.method == "TRACE"
+    return (full_request.method == "TRACE", f"{full_request.method} {full_request.path} {full_request.environ['SERVER_PROTOCOL']}")
