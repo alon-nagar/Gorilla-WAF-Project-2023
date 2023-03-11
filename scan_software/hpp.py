@@ -1,16 +1,15 @@
 def is_request_hpp(request_data, url):
     """
-        Function that checks if a request contains HTTP Parameter Pollution (HPP).
-          First, it checks for HPP in the parameters when entered in the URL directly.
-          Then, it checks for HPP in the parameters when entered in a input field.
-        
-        Args:
-            request_data (str): A JSON string of the request data.
-            args (ImmutableMultiDict): The query parameters to check.
-        
-        Returns:
-            tuple(bool, str): A tuple of (True/False - HPP detected, str - The string where HPP was detected).
-        
+    Function that checks if a request contains HTTP Parameter Pollution (HPP).
+        First, it checks for HPP in the parameters when entered in the URL directly.
+        Then, it checks for HPP in the parameters when entered in a input field.
+    
+    Args:
+        request_data (str): A JSON string of the request data.
+        args (ImmutableMultiDict): The query parameters to check.
+    
+    Returns:
+        tuple(bool, str): A tuple of (True/False - HPP detected, str - The string where HPP was detected)
     """
     
     # Send the request URL to the function that checks it.

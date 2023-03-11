@@ -2,11 +2,12 @@ import re
 from urllib.parse import urlparse, parse_qs, unquote
 
 def is_request_open_redirect(url, allowed_domains=None):
-    """
-    Function to check if a request contains an open redirect attack.
+    """Function to check if a request contains an open redirect attack.
+    
     Args:
         url (str): The URL of the request.
         allowed_domains (list of str): A list of allowed domains. If None, any domain is allowed.
+    
     Returns:
         tuple: (True, redirect_url) if the request contains an open redirect attack, (False, None) otherwise.
     """
