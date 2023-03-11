@@ -9,6 +9,7 @@ import hpp
 import http_host_header_injection
 import open_redirect
 import ssi_injection
+import cross_site_tracing
 
 # Import other custom modules:
 import waf_database
@@ -97,10 +98,11 @@ def check_for_vulnerabilities(request_data, full_request):
     (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(full_request.url)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, full_request.url)
     (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
-
+    (is_xst, xst_text) = cross_site_tracing.is_request_xst(full_request)
+    
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
-        return ("XSS / HTML Injection Attack", xss_text)
+        return ("Cross-Site Scripting (XSS) / HTML Injection Attack", xss_text)
     if is_sqli:
         sqli_text = sqli_text.replace('"', '\\"')
         return ("SQL Injection Attack", sqli_text)
@@ -114,6 +116,9 @@ def check_for_vulnerabilities(request_data, full_request):
     elif is_ssii:
         ssii_text = ssii_text.replace('"', '\\"')
         return ("SSI Injection Attack", ssii_text)  
+    elif is_xst:
+        xst_text = xst_text.replace('"', '\\"')
+        return ("Cross-Site Tracing (XST) Attack", xst_text)
     else:
         return ("Safe", None)
 
