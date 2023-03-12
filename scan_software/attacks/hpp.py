@@ -1,8 +1,8 @@
 def is_request_hpp(request_data, url):
     """
     Function that checks if a request contains HTTP Parameter Pollution (HPP).
-        First, it checks for HPP in the parameters when entered in the URL directly.
-        Then, it checks for HPP in the parameters when entered in a input field.
+        First, it checks for HPP in the parameters when entered in the URL directly [/?name=a,b].
+        Then, it checks for HPP in the parameters when entered in a input field [?name=a%26name%3Db] (%26=&, %3D==).
     
     Args:
         request_data (str): A JSON string of the request data.
@@ -11,12 +11,16 @@ def is_request_hpp(request_data, url):
     Returns:
         tuple(bool, str): A tuple of (True/False - HPP detected, str - The string where HPP was detected)
     """
+    # for key, value in request_data.items():
+    #     print(f"request_data: {request_data.getlist(key)}")
+    # print(f"url: {url}")
     
     # Send the request URL to the function that checks it.
     is_url_safe = is_url_hpp(url)
     
     # Check if the URL is safe.
-    if is_url_safe != (False, None):
+    if is_url_safe != (True, None):
+        print("URL is safe")
         return is_url_safe
     
     # Check if the request data contains HPP.
@@ -40,6 +44,7 @@ def is_text_hpp(text, args):
     """
     # Loop through all the keys and values in the query parameters.
     for key, value in args.items():
+        
         # Check if the parameter key is present in the text.
         if ("&" + key + "=") in text:
             # Return a tuple indicating that HPP was detected and the parameter name with HPP.
