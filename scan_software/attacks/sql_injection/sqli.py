@@ -12,8 +12,8 @@ Requirements:
 import pickle
 
 
-sqli_detection_model = pickle.load(open("sql_injection/ml_sqli_model.pickle", "rb"))
-vectorizer = pickle.load(open("sql_injection/vectorizer_ml_sqli_model.pickle", "rb"))
+sqli_detection_model = pickle.load(open("attacks/sql_injection/ml_sqli_model.pickle", "rb"))
+vectorizer = pickle.load(open("attacks/sql_injection/vectorizer_ml_sqli_model.pickle", "rb"))
 
 
 def is_request_sqli(request_data):

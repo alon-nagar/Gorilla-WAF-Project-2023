@@ -3,20 +3,20 @@ from datetime import datetime
 import urllib.parse
 
 # Attack defense modules:
-import cross_site_scripting.xss
-import sql_injection.sqli
-import hpp
-import http_host_header_injection
-import open_redirect
-import ssi_injection
-import cross_site_tracing
+import attacks.cross_site_scripting.xss as xss
+import attacks.sql_injection.sqli as sqli
+import attacks.hpp as hpp
+import attacks.http_host_header_injection as host_header_injection
+import attacks.open_redirect as open_redirect
+import attacks.ssi_injection as ssi
+import attacks.cross_site_tracing as xst
 
 # Import other custom modules:
 import waf_database
 
 # Define the Flask app and the database:
 app = flask.Flask(__name__)
-db = waf_database.MongoDB("127.0.0.1", 27017)  # Alon's IP: 172.17.0.2
+db = waf_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
     
     
 def main():
@@ -92,13 +92,13 @@ def check_for_vulnerabilities(request_data, full_request):
     Returns:
         str: ALLOW - No vulnerabilities found, BLOCK - Vulnerabilities found.
     """
-    (is_xss, xss_text) = cross_site_scripting.xss.is_request_xss(request_data)
-    (is_sqli, sqli_text) = sql_injection.sqli.is_request_sqli(request_data)
-    (is_hhi, hhi_text) = http_host_header_injection.is_request_http_host_header(full_request.headers)
+    (is_xss, xss_text) = xss.is_request_xss(request_data)
+    (is_sqli, sqli_text) = sqli.is_request_sqli(request_data)
+    (is_hhi, hhi_text) = host_header_injection.is_request_http_host_header(full_request.headers)
     (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(full_request.url)
     (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, full_request.url)
-    (is_ssii, ssii_text) = ssi_injection.is_request_ssi_injection(request_data)
-    (is_xst, xst_text) = cross_site_tracing.is_request_xst(full_request)
+    (is_ssii, ssii_text) = ssi.is_request_ssi_injection(request_data)
+    (is_xst, xst_text) = xst.is_request_xst(full_request)
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
