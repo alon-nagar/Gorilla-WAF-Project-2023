@@ -1,0 +1,74 @@
+body {
+    /* Remove the margin on the body element to eliminate the space between the navigation bar and the content area. */
+    margin: 0;
+    padding-top: 70px;
+}
+  
+
+/*-------------------------------------[ Top Navigation Bar ]--------------------------------------*/
+
+/* Style the inside of the navigation bar (the imaginary area where the elements are). */
+#navigation-container {
+    width: 80%;
+    margin: 0 auto;
+    height: 70px;
+}
+
+/* Style the navigation bar itself. */
+.navigation-bar {
+    position: fixed;
+    top: 0;
+    background-color: #c1c1c1;
+    height: 70px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Style the navbar's logo image. */
+.navigation-bar img {
+    float: left;
+    height: 70px;
+}
+
+/* Style the navigation bar's "list". */
+.navigation-bar ul {
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    display:inline-block;
+    vertical-align:top;
+}
+
+/* Style the navigation bar's list items. */
+.navigation-bar li {
+    list-style-type: none;
+    padding: 0px;
+    height: 24px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    display: inline;
+}
+
+/* Style the navigation bar's links. */
+.navigation-bar li a {
+    color: black;
+    font-size: 27px;
+    font-family: "Candara";
+    text-decoration: none;
+    line-height: 70px;
+    padding: 5px 15px;
+}
+
+/* Style the navigation bar's links when the mouse hovers over them. */
+.navigation-bar li a:hover {
+    background-color: #b3e0d9;
+    border-radius: 10px;
+    color: white;
+}
+
+/* Style the navigation bar's link when it's the current page. */
+.navigation-bar li #current_page {
+    background-color: #01987f;
+    border-radius: 10px;
+    color: white;
+}
