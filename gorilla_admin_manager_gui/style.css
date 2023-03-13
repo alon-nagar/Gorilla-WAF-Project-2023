@@ -2,6 +2,7 @@ body {
     /* Remove the margin on the body element to eliminate the space between the navigation bar and the content area. */
     margin: 0;
     padding-top: 70px;
+    font-family: "Candara";
 }
   
 
@@ -18,7 +19,7 @@ body {
 .navigation-bar {
     position: fixed;
     top: 0;
-    background-color: #c1c1c1;
+    background-color: #c4f2ea;
     height: 70px;
     width: 100%;
     text-align: center;
@@ -53,7 +54,6 @@ body {
 .navigation-bar li a {
     color: black;
     font-size: 27px;
-    font-family: "Candara";
     text-decoration: none;
     line-height: 70px;
     padding: 5px 15px;
@@ -71,4 +71,56 @@ body {
     background-color: #01987f;
     border-radius: 10px;
     color: white;
+}
+
+
+/*-------------------------------------[ Explanation Area ]--------------------------------------*/
+.explanation {
+    font-size: 20px;
+    text-align: center;
+    padding-top: 1px;
+    padding-bottom: 2px;
+    margin-bottom: 20px;
+    background-color: #c4f2ea;
+}
+
+
+/*-------------------------------------[ Incoming Requests' List ]--------------------------------------*/
+.incoming_requests_container {
+    flex: 1;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.incoming_requests_container ul {
+    list-style: none;
+}
+ 
+.incoming_requests_container ul li {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    display: block;
+    cursor: pointer;
+} 
+
+
+/*-------------------------------------[ Request Details ]--------------------------------------*/
+.request_details_container {
+    flex: 1;
+    padding-left: 2%;
+    box-sizing: border-box;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/*-------------------------------------[ Other ]--------------------------------------*/
+.content_container {
+    display: flex;
+    max-width: 100%;
 }
