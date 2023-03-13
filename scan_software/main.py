@@ -42,6 +42,8 @@ def handle_request(url=""):
     # Check the request's methods and act accordingly (because the request data (that we want to scan) is in different places):
     if flask.request.method in [ "GET", "HEAD", "DELETE" ]:
         text_to_check = flask.request.args
+        print("--------------------")
+        print(flask.request.url)
         
     elif flask.request.method in [ "POST", "PUT", "PATCH" ]:
         text_to_check = flask.request.form
