@@ -166,14 +166,12 @@ class MongoDB:
         
         Args:
             ip_address (str): Attacker's IP Address, the IP address we want to check.
+        
         Returns:
             bool: True if the IP is in the collection, False if not.
         """
-        # Define the entry we want to find in "Blacklist" collection, and return the result:
-        entry_to_find = {
-            "IP Address": ip_address, 
-        }
-        return self.__db["Blacklist"].find_one(entry_to_find) is not None
+        
+        return self.find_in_blacklist(ip_address) is not None
     
     
     def is_blocked(self, ip_address):
