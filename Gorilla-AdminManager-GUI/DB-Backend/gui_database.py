@@ -20,22 +20,94 @@ class MongoDB:
         self.__db = self.__client[GORILLA_DB_NAME]
         
     
-    def add_ip_to_blacklist(self, ip_address):
-        """
-        Add new IP to the "Blacklist" collection.
-        
-        Args:
-            ip_address (str): Attacker's IP Address.
-            
+    # ------------------------------------[ INCOMING REQUESTS ]------------------------------------
+    def get_all_incoming_requests(self):
+        """Function to return all the entries in the "IncomingRequests" collection.
+
         Returns:
-            str: Indication if the IP was added to the "Blacklist" collection or not for some reason.
+            str: JSON string includes all the entries in the "IncomingRequests" collection.
+        """
+        return json.dumps(list(self.__db["IncomingRequests"].find()), default=json_util.default)
+    
+    
+    def get_request_by_id(self, id):
+        """Function to return a specific entry in the "IncomingRequests" collection, by the given ID.
+
+        Args:
+            id (str): The entry's ID.
+
+        Returns:
+            str: JSON string includes the entry in "IncomingRequests" (or "Not in Incoming Requests" if ID not found).
         """
         
-        # Check that the IP is not already in the "Blacklist" collection:
-        if (self.is_in_blacklist(ip_address)):
+        if not self.is_in_incoming_request(id):
+            return "Not in Incoming Requests"
+        
+        entry_to_find = {
+            "_id": ObjectId(id),
+        }
+        return json.dumps(list(self.__db["IncomingRequests"].find_one(entry_to_find)), default=json_util.default)
+    
+    
+    # Helper function:
+    def is_in_incoming_request(self, id):
+        """Function to check if the given ID is in the "IncomingRequests" collection.
+
+        Args:
+            id (str): The entry's ID to check.
+
+        Returns:
+            bool: True if the ID is in the collection, False if not.
+        """
+        
+        entry_to_find = {
+            "_id": ObjectId(id),
+        }
+        return self.__db["IncomingRequests"].find_one(entry_to_find) is not None
+        
+    
+    # ----------------------------------------[ BLACKLIST ]----------------------------------------
+    def get_all_blacklist(self):
+        """Function to return all the entries in the "Blacklist" collection.
+
+        Returns:
+            str: JSON string includes all the entries in the "Blacklist" collection.
+        """
+        return json.dumps(list(self.__db["Blacklist"].find()), default=json_util.default)
+    
+    
+    def get_blacklist_entry_by_ip(self, ip_address):
+        """Function to return a specific entry in the "Blacklist" collection, by the given IP.
+
+        Args:
+            ip_address (str): The entry's IP Address.
+
+        Returns:
+            str: JSON string includes the entry in "Blacklist" (or "Not in Blacklist" if IP not found).
+        """
+        
+        if not self.is_in_blacklist(id):
+            return "Not in Blacklist"
+        
+        entry_to_find = {
+            "IP Address": ip_address,
+        }
+        return json.dumps(list(self.__db["Blacklist"].find_one(entry_to_find)), default=json_util.default)
+    
+    
+    def add_ip_to_blacklist(self, ip_address):
+        """Function to add IP to the "Blacklist" collection.
+
+        Args:
+            ip_address (str): The IP address to add.
+
+        Returns:
+            str: "Added to Blacklist" if added, "Already in Blacklist" if IP is already the blacklist.
+        """
+        
+        if self.is_in_blacklist(ip_address):
             return "Already in Blacklist"
         
-        # Define the entry that we want to add to the collection, and add it:
         entry_to_add = {
             "IP Address": ip_address,
             "Attacks Performed": "",
@@ -45,19 +117,18 @@ class MongoDB:
         self.__db["Blacklist"].insert_one(entry_to_add)
         return "Added to Blacklist"
         
-        
-    def delete_ip_from_blacklist(self, ip_address):
-        """
-        Delete entry from the "Blacklist" collection, by the given IP.
-        
+    
+    def remove_ip_from_blacklist(self, ip_address):
+        """Functino to remove IP from the "Blacklist" collection.
+
         Args:
-            ip_address (str): The IP address we want to delete.
-            
+            ip_address (str): The IP address to remove.
+
         Returns:
-            str: Indication if the IP was deleted from the "Blacklist" collection or not for some reason.
+            str: "Deleted from Blacklist" if deleted, "Not in Blacklist" if IP is not in the blacklist.
         """
         
-        if (not self.is_in_blacklist(ip_address)):
+        if not self.is_in_blacklist(ip_address):
             return "Not in Blacklist"
         
         entry_to_delete = {
@@ -65,51 +136,21 @@ class MongoDB:
         }
         self.__db["Blacklist"].delete_one(entry_to_delete)
         return "Deleted from Blacklist"
+            
         
-    
+    # Helper function:
     def is_in_blacklist(self, ip_address):
-        """
-        Check if the given IP is in the "Blacklist" collection.
-        
+        """Function to check if the given IP is in the "Blacklist" collection.
+
         Args:
-            ip_address (str): Attacker's IP Address, the IP address we want to check.
-        
+            ip_address (str): The entry's IP Address to check.
+
         Returns:
             bool: True if the IP is in the collection, False if not.
         """
+        
         entry_to_find = {
             "IP Address": ip_address, 
         }
-        
         return self.__db["Blacklist"].find_one(entry_to_find) is not None
-    
-    
-    def is_in_incoming_request(self, id):
-        entry_to_find = {
-            "_id": ObjectId(id),
-        }
-        
-        return self.__db["IncomingRequests"].find_one(entry_to_find) is not None
-    
-    
-    def get_http_request(self, id):
-        entry_to_find = {
-            "_id": ObjectId(id),
-        }
-        return json.dumps(list(self.__db["IncomingRequests"].find_one(entry_to_find)), default=json_util.default)
-    
-    
-    def get_blacklisted_ip(self, ip_address):
-        entry_to_find = {
-            "IP Address": ip_address,
-        }
-        return json.dumps(list(self.__db["Blacklist"].find_one(entry_to_find)), default=json_util.default)
-    
-    
-    def get_incoming_requests_collection(self):
-        return json.dumps(list(self.__db["IncomingRequests"].find()), default=json_util.default)
-    
-    
-    def get_blacklist_collection(self):
-        return json.dumps(list(self.__db["Blacklist"].find()), default=json_util.default)
     
