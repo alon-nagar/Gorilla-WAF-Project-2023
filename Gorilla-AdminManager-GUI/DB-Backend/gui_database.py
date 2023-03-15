@@ -46,7 +46,7 @@ class MongoDB:
         entry_to_find = {
             "_id": ObjectId(id),
         }
-        return json.dumps(list(self.__db["IncomingRequests"].find_one(entry_to_find)), default=json_util.default)
+        return json.dumps(self.__db["IncomingRequests"].find_one(entry_to_find), default=json_util.default)
     
     
     # Helper function:
@@ -73,7 +73,10 @@ class MongoDB:
         Returns:
             str: JSON string includes all the entries in the "Blacklist" collection.
         """
-        return json.dumps(list(self.__db["Blacklist"].find()), default=json_util.default)
+        results = []
+        for document in self.__db["Blacklist"].find():
+            results.append(document)
+        return json.dumps(results, default=json_util.default)
     
     
     def get_blacklist_entry_by_ip(self, ip_address):
@@ -86,13 +89,13 @@ class MongoDB:
             str: JSON string includes the entry in "Blacklist" (or "Not in Blacklist" if IP not found).
         """
         
-        if not self.is_in_blacklist(id):
+        if not self.is_in_blacklist(ip_address):
             return "Not in Blacklist"
         
         entry_to_find = {
             "IP Address": ip_address,
         }
-        return json.dumps(list(self.__db["Blacklist"].find_one(entry_to_find)), default=json_util.default)
+        return json.dumps(self.__db["Blacklist"].find_one(entry_to_find), default=json_util.default)
     
     
     def add_ip_to_blacklist(self, ip_address):
@@ -131,10 +134,10 @@ class MongoDB:
         if not self.is_in_blacklist(ip_address):
             return "Not in Blacklist"
         
-        entry_to_delete = {
+        entry_to_remove = {
             "IP Address": ip_address, 
         }
-        self.__db["Blacklist"].delete_one(entry_to_delete)
+        self.__db["Blacklist"].delete_one(entry_to_remove)
         return "Deleted from Blacklist"
             
         

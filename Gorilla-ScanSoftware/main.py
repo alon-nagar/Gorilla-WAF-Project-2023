@@ -14,14 +14,16 @@ import attacks.cross_site_tracing as xst
 # Import other custom modules:
 import waf_database
 
+SCAN_FLASK_PORT = 3333
+
 # Define the Flask app and the database:
 app = flask.Flask(__name__)
 db = waf_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
-  
+
 
 def main():
     # Start the Flask app:
-    app.run(host="0.0.0.0", port=3333)
+    app.run(host="0.0.0.0", port=SCAN_FLASK_PORT)
 
 # Function to handle each incoming request (it check for vulnerabilities in it):
 @app.route("/<path:url>", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
