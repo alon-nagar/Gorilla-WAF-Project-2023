@@ -8,6 +8,7 @@ function generateBlacklistTableHTML(data)
         <td><p>${item.numOfAttacks}</p></td>
         <td><p>${item.attacksPeformed}</p></td>
         <td><p>${item.isBlocked}</p></td>
+        <td><a onclick="alert(2)"><img src="Resources/trash-icon.png"></a></td>
     </tr>`;
     });
     
