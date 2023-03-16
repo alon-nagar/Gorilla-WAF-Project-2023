@@ -70,14 +70,65 @@
 							<a href="index.html">Gorilla's Admin Manager ></a>
 						</li>
 						<li>
-							<a class="active" href="index.html">Blacklist</a>
+							<a class="active" href="blacklist.html">Blacklist</a>
 						</li>
 					</ul>
 				</div>
 			</div>
             
-			<h1> Welcome Blacklist!</h1>
+			<div class="table-data">
 
+				<div class="order" id="blacklist_table">
+					<div class="head">
+						<h3>Blacklist</h3>
+					</div>
+				
+					<table>
+						<thead>
+							<tr>
+								<th>IP Address</th>
+								<th>Number of Attacks</th>
+								<th>Attacks Performed</th>
+								<th>Is Blocked?</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<p>
+										192.168.2.1
+									</p>
+								</td>
+								<td>
+									<p>2</p>
+								</td>
+								<td>
+									<p>XSS/HTML Injection, SQL Injection</p>
+								</td>
+								<td>
+									<p>No</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p>
+										10.0.0.4
+									</p>
+								</td>
+								<td>
+									<p>3</p>
+								</td>
+								<td>
+									<p>SSI Injection, XSS/HTML Injection, SQL Injection</p>
+								</td>
+								<td>
+									<p>Yes</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</main>
 		<!-- MAIN -->
 	</section>
