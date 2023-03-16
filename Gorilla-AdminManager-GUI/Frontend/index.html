@@ -18,33 +18,33 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 
-		<a href="#" class="brand">
+		<a href="index.html" class="brand">
             <img  src="Resources/gorilla-admin-logo.png">
 		</a>
 
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="#">
+				<a href="index.html">
 					<span class="text">Home</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="incoming_requests.html">
 					<span class="text">Incoming Requests</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="blacklist.html">
 					<span class="text">Blacklist</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="statistics.html">
 					<span class="text">Statistics</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="settings.html">
 					<span class="text">Settings</span>
 				</a>
 			</li>
@@ -67,126 +67,17 @@
 					<h1>Home</h1>
 					<ul class="path">
 						<li>
-							<a href="#">Gorilla's Admin Manager ></a>
+							<a href="index.html">Gorilla's Admin Manager ></a>
 						</li>
 						<li>
-							<a class="active" href="#">Home</a>
+							<a class="active" href="index.html">Home</a>
 						</li>
 					</ul>
 				</div>
 			</div>
             
+			<h1> Welcome Home!</h1>
 
-			<div class="table-data" id="incoming_requests_table">
-
-				<div class="order">
-					<div class="head">
-						<h3>Recent Incoming Requests</h3>
-					</div>
-				
-                    <table>
-						<thead>
-							<tr>
-                                <th>Time</th>
-								<th>IP Address</th>
-								<th>HTTP Method</th>
-								<th>URI</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<p>16/03/2023 17:59</p>
-								</td>
-								<td>192.168.2.1</td>
-								<td>
-                                    <p>GET</p>
-                                </td>
-                                <td>
-                                    <p>/index.php</p>
-                                </td>
-							</tr>
-							<tr>
-								<td>
-									<p>16/03/2023 17:57</p>
-								</td>
-								<td>10.0.0.4</td>
-								<td>
-                                    <p>GET</p>
-                                </td>
-                                <td>
-                                    <p>/vulnerabilities/xss_r/?name=alon</p>
-                                </td>
-							</tr>
-							<tr>
-								<td>
-									<p>16/03/2023 17:57</p>
-								</td>
-								<td>127.0.0.1</td>
-								<td>
-                                    <p>POST</p>
-                                </td>
-                                <td>
-                                    <p>/login.php</p>
-                                </td>
-							</tr>
-							<tr>
-								<td>
-									<p>15/03/2023 08:32</p>
-								</td>
-								<td>192.168.2.1</td>
-								<td>
-                                    <p>GET</p>
-                                </td>
-                                <td>
-                                    <p>/vulnerabilities/sqli/</p>
-                                </td>
-							</tr>
-							<tr>
-								<td>
-									<p>15/03/2023 08:32</p>
-								</td>
-								<td>192.168.2.1</td>
-								<td>
-                                    <p>GET</p>
-                                </td>
-                                <td>
-                                    <p>/vulnerabilities</p>
-                                </td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-                
-				<div class="expand-request">
-                    <p><b>Time: </b>16/03/2023 17:57</p>
-                    <p><b>IP Address: </b>10.0.0.4</p>
-                    <p><b>Port: </b>2935</p>
-                    <p><b>Is Safe? </b>No</p>
-                    <p><b>Attack Name: </b> Cross-Site Scripting (XSS)</p>
-                    <p>
-                        <b>Content: </b><br>
-                        GET /vulnerabilities/xss_r/?name=alon HTTP/1.1
-                        <br>Connection: close,keep-alive
-                        <br>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36
-                        <br>Cookie: security_level=0; session=9603a1c6-1fe4-4f93-be1a-68ad6a5738ed.vsLXilN0X5P1XWLCWBveUL1PkW8; pvisitor=964360b4-305d-44c7-a813-e621ac19e47d; security=low; PHPSESSID=rfud62s3ru0guhv5he1i9i63ef
-                        <br>Sec-Ch-Ua-Mobile: ?0
-                        <br>Cache-Control: max-age=0
-                        <br>Host: localhost
-                        <br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-                        <br>Upgrade-Insecure-Requests: 1
-                        <br>Sec-Fetch-Site: none
-                        <br>Sec-Fetch-Dest: document
-                        <br>Accept-Language: he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7
-                        <br>Accept-Encoding: gzip, deflate, br
-                        <br>X-Forwarded-For: 127.0.0.1
-                        <br>Sec-Ch-Ua-Platform: "Windows"
-                        <br>Sec-Fetch-User: ?1
-                        <br>Sec-Ch-Ua: "Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"
-                        <br>Sec-Fetch-Mode: navigate
-                    </p>
-                </div>
-			</div>
 		</main>
 		<!-- MAIN -->
 	</section>
