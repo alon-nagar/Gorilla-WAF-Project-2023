@@ -1,126 +1,341 @@
+/* Import the main font */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Design everything */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Brand image at the side nav-bar */
+.brand img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	height: 87%;
+}
+
+/* Remove all the underline from the links */
+a {
+	text-decoration: none;
+}
+
+/* Remove all the bullets from the lists */
+li {
+	list-style: none;
+}
+
+/* Define the colors and fonts as constants */
+:root {
+	--poppins: 'Poppins', sans-serif;
+	--lato: 'Lato', sans-serif;
+
+	--light: #F9F9F9;
+	--blue: #01987f;
+	--light-blue: #CFE8FF;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #342E37;
+	--red: #DB504A;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+}
+
+/* ??? */
+html {
+	overflow-x: hidden;
+}
+
+/* Background body (the whole page without navbar and content) */
 body {
-    /* Remove the margin on the body element to eliminate the space between the navigation bar and the content area. */
-    margin: 0;
-    padding-top: 70px;
-    font-family: "Candara";
-}
-  
-
-/*-------------------------------------[ Top Navigation Bar ]--------------------------------------*/
-
-/* Style the inside of the navigation bar (the imaginary area where the elements are). */
-#navigation-container {
-    width: 80%;
-    margin: 0 auto;
-    height: 70px;
-}
-
-/* Style the navigation bar itself. */
-.navigation-bar {
-    position: fixed;
-    top: 0;
-    background-color: #c4f2ea;
-    height: 70px;
-    width: 100%;
-    text-align: center;
-}
-
-/* Style the navbar's logo image. */
-.navigation-bar img {
-    float: left;
-    height: 70px;
-}
-
-/* Style the navigation bar's "list". */
-.navigation-bar ul {
-    padding: 0px;
-    margin: 0px;
-    text-align: center;
-    display:inline-block;
-    vertical-align:top;
-}
-
-/* Style the navigation bar's list items. */
-.navigation-bar li {
-    list-style-type: none;
-    padding: 0px;
-    height: 24px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    display: inline;
-}
-
-/* Style the navigation bar's links. */
-.navigation-bar li a {
-    color: black;
-    font-size: 27px;
-    text-decoration: none;
-    line-height: 70px;
-    padding: 5px 15px;
-}
-
-/* Style the navigation bar's links when the mouse hovers over them. */
-.navigation-bar li a:hover {
-    background-color: #b3e0d9;
-    border-radius: 10px;
-    color: white;
-}
-
-/* Style the navigation bar's link when it's the current page. */
-.navigation-bar li #current_page {
-    background-color: #01987f;
-    border-radius: 10px;
-    color: white;
+	background: var(--grey);
+	overflow-x: hidden;
 }
 
 
-/*-------------------------------------[ Explanation Area ]--------------------------------------*/
-.explanation {
-    font-size: 20px;
-    text-align: center;
-    padding-top: 1px;
-    padding-bottom: 2px;
-    margin-bottom: 20px;
-    background-color: #c4f2ea;
+
+
+
+/* ------------------------------------------[ SIDEBAR ]------------------------------------------ */
+/* Define the sidebar itself */
+#sidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 280px;
+	height: 100%;
+	background: var(--light);
+	z-index: 2000;  /* Bring sidebar to front */
+	font-family: var(--lato);
+	overflow-x: hidden;
+	scrollbar-width: none;
+}
+
+/* Define logo at the top of the sidebar */
+#sidebar .brand {
+	height: 70px;
+	display: flex;
+	align-items: center;
+	background: var(--light);  /* ??? */
+	z-index: 500;
+}
+
+/* Define menu list */
+#sidebar .side-menu {
+	width: 100%;
+	margin-top: 48px;  /* Distance from brand logo */
+}
+
+/* Define each item in the menu list */
+#sidebar .side-menu li {
+	height: 48px;
+	background: transparent;
+	margin-left: 6px;
+	border-radius: 48px 0 0 48px;
+	padding: 4px;
+}
+
+/* Define clicked item in the menu list */
+#sidebar .side-menu li.active {
+	background: var(--grey);
+	position: relative;
 }
 
 
-/*-------------------------------------[ Incoming Requests' List ]--------------------------------------*/
-.incoming_requests_container {
-    flex: 1;
-    max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
+/* Top selected box corner */
+#sidebar .side-menu li.active::before {
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	top: -40px;
+	right: 0;
+	box-shadow: 20px 20px 0 var(--grey);
+	z-index: -1;
 }
 
-.incoming_requests_container ul {
-    list-style: none;
-}
- 
-.incoming_requests_container ul li {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f1f1f1;
-    display: block;
-    cursor: pointer;
-} 
-
-
-/*-------------------------------------[ Request Details ]--------------------------------------*/
-.request_details_container {
-    flex: 1;
-    padding-left: 2%;
-    box-sizing: border-box;
-    max-height: 350px;
-    overflow-y: auto;
-    overflow-x: hidden;
+/* Bottom selected box corner */
+#sidebar .side-menu li.active::after {
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	bottom: -40px;
+	right: 0;
+	box-shadow: 20px -20px 0 var(--grey);
+	z-index: -1;
 }
 
+/* ??? */
+#sidebar .side-menu li a {
+	width: 100%;
+	height: 100%;
+	background: var(--light);
+	display: flex;
+	align-items: center;
+	border-radius: 48px;
+	font-size: 16px;
+	color: var(--dark);
+	white-space: nowrap;
+	overflow-x: hidden;
+	padding-left: 7%;
+}
 
-/*-------------------------------------[ Other ]--------------------------------------*/
-.content_container {
-    display: flex;
-    max-width: 100%;
+/* When hover on one of the items' texts in the menu list */
+#sidebar .side-menu li a:hover {
+	color: var(--blue);
+}
+
+/* When click on one of the items' texts in the menu list */
+#sidebar .side-menu.top li.active a {
+	color: var(--blue);
+}
+/* -----------------------------------------[ END SIDEBAR ]----------------------------------------- */
+
+
+
+/* -------------------------------------------[ CONTENT ]------------------------------------------- */
+#content {
+	position: relative;
+	width: calc(100% - 280px);
+	left: 280px;
+	transition: .3s ease;
+}
+
+
+/* MAIN */
+/* Define the main content */
+#content main {
+	width: 100%;
+	padding: 36px 24px;
+	font-family: var(--poppins);
+	max-height: calc(100vh - 56px);
+	overflow-y: auto;
+}
+
+/* Design the header itself */
+#content main .head-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	grid-gap: 16px;
+	flex-wrap: wrap;
+}
+
+/* Design the title in the header */
+#content main .head-title .left h1 {
+	font-size: 36px;
+	font-weight: 600;
+	margin-bottom: 10px;
+	color: var(--dark);
+}
+
+/* Design the path in the header */
+#content main .head-title .left .path {
+	display: flex;
+	align-items: center;
+	grid-gap: 16px;
+}
+
+/* Design the path's text itself in the header */
+#content main .head-title .left .path li a {
+	color: var(--dark-grey);
+	pointer-events: none;
+}
+
+/* Design the current page in the path */
+#content main .head-title .left .path li a.active {
+	color: var(--blue);
+	pointer-events: unset;
+}
+
+/* Design the table's shape */
+#content main .table-data {
+	display: flex;
+	flex-wrap: wrap;
+	grid-gap: 24px;
+	margin-top: 24px;
+	width: 100%;
+	color: var(--dark);
+}
+
+/* Design the table itself */
+#content main .table-data > div {
+	border-radius: 20px;
+	background: var(--light);
+	padding: 24px;
+	overflow-x: auto;
+}
+
+/* Design the table's title */
+#content main .table-data .head {
+	display: flex;
+	align-items: center;
+	grid-gap: 16px;
+	margin-bottom: 24px;
+}
+
+/* Design the table's title's text */
+#content main .table-data .head h3 {
+	margin-right: auto;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+/* Design table's width */
+#content main .table-data .order {
+	flex-grow: 1;
+	flex-basis: 500px;
+}
+
+/* Design the table's title's width */
+#content main .table-data .order table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+/* Sync the table's title's width with the table's width */
+#content main .table-data .order table th {
+	padding-bottom: 12px;
+	font-size: 13px;
+	text-align: left;
+	border-bottom: 1px solid var(--grey);
+}
+
+/* Design row in the table */
+#content main .table-data .order table td {
+	padding: 16px 0;
+}
+
+/* Design the left column */
+#content main .table-data .order table tr td:first-child {
+	display: flex;
+	align-items: center;
+	grid-gap: 12px;
+	padding-left: 6px;
+}
+
+/* Design hovering on the row */
+#content main .table-data .order table tbody tr:hover {
+	background: var(--grey);
+}
+
+
+
+
+
+/* -----------------------------------------[ CUSTOMIZE SCREEN FOR DIFFERENT DEVICES ] ----------------------------------------- */
+
+@media screen and (max-width: 768px) {
+	#sidebar {
+		width: 200px;
+	}
+
+	#content {
+		width: calc(100% - 60px);
+		left: 200px;
+	}
+
+	#content nav .nav-link {
+		display: none;
+	}
+}
+
+
+@media screen and (max-width: 576px) {
+	#content nav form .form-input input {
+		display: none;
+	}
+
+	#content nav form .form-input button {
+		width: auto;
+		height: auto;
+		background: transparent;
+		border-radius: none;
+		color: var(--dark);
+	}
+
+	#content nav form.show .form-input input {
+		display: block;
+		width: 100%;
+	}
+	#content nav form.show .form-input button {
+		width: 36px;
+		height: 100%;
+		border-radius: 0 36px 36px 0;
+		color: var(--light);
+		background: var(--red);
+	}
+
+	#content main .table-data .head {
+		min-width: 420px;
+	}
+	#content main .table-data .order table {
+		min-width: 420px;
+	}
 }
