@@ -32,7 +32,8 @@ li {
 	--lato: 'Lato', sans-serif;
 
 	--light: #F9F9F9;
-	--blue: #01987f;
+	--turquoise: #01987f;
+	--light-turquoise: #7eb3aa;
 	--light-blue: #CFE8FF;
 	--grey: #eee;
 	--dark-grey: #AAAAAA;
@@ -57,7 +58,27 @@ body {
 
 
 
+/* ------------------------------------------[ SCROLLBAR ]------------------------------------------ */
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
 
+/* Track ("background") */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: var(--turquoise);
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: var(--light-turquoise);
+}
 
 /* ------------------------------------------[ SIDEBAR ]------------------------------------------ */
 /* Define the sidebar itself */
@@ -148,12 +169,12 @@ body {
 
 /* When hover on one of the items' texts in the menu list */
 #sidebar .side-menu li a:hover {
-	color: var(--blue);
+	color: var(--turquoise);
 }
 
 /* When click on one of the items' texts in the menu list */
 #sidebar .side-menu.top li.active a {
-	color: var(--blue);
+	color: var(--turquoise);
 }
 /* -----------------------------------------[ END SIDEBAR ]----------------------------------------- */
 
@@ -210,7 +231,7 @@ body {
 
 /* Design the current page in the path */
 #content main .head-title .left .path li a.active {
-	color: var(--blue);
+	color: var(--turquoise);
 	pointer-events: unset;
 }
 
@@ -228,8 +249,18 @@ body {
 #content main .table-data > div {
 	border-radius: 20px;
 	background: var(--light);
-	padding: 24px;
+	padding: 24px; 
 	overflow-x: auto;
+}
+
+/* Design the incoming requests table */
+#content main .table-data #incoming_requests_table {
+	height: 400px;
+}
+
+/* Design the expand request table */
+#content main .table-data #expand_reqeust_table {
+	height: 600px;
 }
 
 /* Design the table's title */
