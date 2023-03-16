@@ -82,7 +82,14 @@
 					<div class="head">
 						<h3>Blacklist</h3>
 					</div>
-				
+					
+					<form action="#">
+						<div class="one_line_input" id="add_to_blacklist">
+							<input type="add_ip" placeholder="IP Address to add">
+							<button type="submit" class="add-ip-btn"><img src="Resources/plus-icon.png"></button>
+						</div>
+					</form>
+
 					<table>
 						<thead>
 							<tr>
@@ -108,6 +115,7 @@
 								<td>
 									<p>No</p>
 								</td>
+								<td><a onclick="alert(1)"><img src="Resources/trash-icon.png"></a></td>
 							</tr>
 							<tr>
 								<td>
@@ -124,6 +132,7 @@
 								<td>
 									<p>Yes</p>
 								</td>
+								<td><a onclick="alert(2)"><img src="Resources/trash-icon.png"></a></td>
 							</tr>
 						</tbody>
 					</table>

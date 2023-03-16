@@ -316,9 +316,66 @@ body {
 	background: var(--grey);
 }
 
+#blacklist_table table tbody tr td a img {
+	width: 25px;
+	height: 25px;
+	padding: 0px;
+	margin: 0px;
+}
+
+#blacklist_table table tbody tr td a img:hover {
+	opacity: 0.6;
+	cursor: pointer;
+}
 
 
+/* -----------------------------------------[ ADD IP BLACKLIST ] ----------------------------------------- */
+.one_line_input {
+	display: flex;
+	align-items: center;
+	height: 36px;
+	width: 500px;
+	margin-top: 10px;
+	margin-bottom: 40px;
+}
 
+.one_line_input input {
+	flex-grow: 1;
+	padding: 0 16px;
+	height: 100%;
+	border: none;
+	background: var(--grey);
+	border-radius: 36px 0 0 36px;
+	outline: none;
+	width: 100%;
+	color: var(--dark);
+	font: 400 16px var(--poppins);
+}
+
+.one_line_input button {
+	width: 36px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--blue);
+	color: var(--light);
+	font-size: 18px;
+	border: none;
+	outline: none;
+	border-radius: 0 36px 36px 0;
+	cursor: pointer;
+}
+
+#blacklist_table form div button img {
+	width: 36px;
+	height: 36px;
+}
+
+#blacklist_table form div button img:hover {
+	opacity: 0.6;
+	cursor: pointer;
+}
 
 /* -----------------------------------------[ CUSTOMIZE SCREEN FOR DIFFERENT DEVICES ] ----------------------------------------- */
 
