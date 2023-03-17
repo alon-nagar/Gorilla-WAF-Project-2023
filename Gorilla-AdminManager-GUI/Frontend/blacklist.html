@@ -12,7 +12,7 @@
 	<title>Gorilla Admin Manager</title>
 </head>
 
-<body>
+<body onload="getBlacklist()">
 
 
 	<!-- SIDEBAR -->
@@ -81,6 +81,7 @@
 				<div class="order" id="blacklist_table">
 					<div class="head">
 						<h3>Blacklist</h3>
+						<button class="refresh_button" onclick="getBlacklist()"><img src="Resources/refresh-icon.png"></button>
 					</div>
 					
 					<form action="#">
