@@ -84,10 +84,13 @@
 						<button class="refresh_button" onclick="getBlacklist()"><img src="Resources/refresh-icon.png"></button>
 					</div>
 					
-					<form action="#">
-						<div class="one_line_input" id="add_to_blacklist">
-							<input type="add_ip" placeholder="IP Address to add">
-							<button type="submit" class="add-ip-btn"><img src="Resources/plus-icon.png"></button>
+					<form>
+						<div id="field_and_error">
+							<div class="one_line_input" id="add_to_blacklist">
+								<input type="text" id="ip_to_add" placeholder="IP Address to add (X.X.X.X format)" required>
+								<button disabled="true" onclick="addIp()" type="submit" id="add_ip_button"><img src="Resources/plus-icon.png"></button>
+							</div>
+							<div><p class="error-message" id="ipError">Error Message</p></div>
 						</div>
 					</form>
 

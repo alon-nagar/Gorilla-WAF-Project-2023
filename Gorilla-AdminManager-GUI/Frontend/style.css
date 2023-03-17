@@ -56,7 +56,15 @@ body {
 	overflow-x: hidden;
 }
 
+.error-message {
+	display: none;
+	color: red;
+	margin-left: 10px;
+}
 
+#field_and_error {
+	margin-bottom: 20px;
+}
 
 /* ------------------------------------------[ SCROLLBAR ]------------------------------------------ */
 /* width */
@@ -345,7 +353,7 @@ body {
 	height: 36px;
 	width: 500px;
 	margin-top: 10px;
-	margin-bottom: 40px;
+	margin-bottom: 5px;
 }
 
 .one_line_input input {
