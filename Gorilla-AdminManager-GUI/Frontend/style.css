@@ -266,6 +266,11 @@ body {
 	height: 400px;
 }
 
+/* Design the blacklist table */
+#content main .table-data #blacklist_table {
+	height: 500px;
+}
+
 /* Design the expand request table */
 #content main .table-data #expand_reqeust_table {
 	height: 600px;
@@ -466,6 +471,7 @@ body {
 		background: var(--red);
 	}
 
+	
 	#content main .table-data .head {
 		min-width: 420px;
 	}
