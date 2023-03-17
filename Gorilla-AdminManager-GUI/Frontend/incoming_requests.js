@@ -14,15 +14,26 @@ function generateIncomingRequestsTableHTML(data)
     return html;
 }
 
-// Get a reference to the tbody element of the table:
-const tbody = document.querySelector("#incoming_requests_data");
+function getData() 
+{
 
+    // create a new XMLHttpRequest object
+    let xhr = new XMLHttpRequest();
 
-// Example of how to modify the rows dynamically
-const newData = [
-    { time: '16/03/2023 18:00', ipAddress: '192.168.2.2', httpMethod: 'POST', uri: '/logout.php' },
-    { time: '16/03/2023 17:58', ipAddress: '10.0.0.5', httpMethod: 'GET', uri: '/dashboard.php' }
-];
+    // set the HTTP method and URL
+    xhr.open("GET", "http://localhost:4444/get_all_incoming_requests", true);
 
-// Insert the initial rows into the table:
-tbody.innerHTML = generateIncomingRequestsTableHTML(newData);
+    // define what happens when the response is received
+    xhr.onreadystatechange = function() {
+
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // update the HTML with the response data
+            document.getElementById("xyz").innerHTML = this.responseText;
+        }
+
+    };
+
+    // send the request
+    xhr.send();
+
+}
