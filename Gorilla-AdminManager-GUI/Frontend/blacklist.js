@@ -1,8 +1,9 @@
-
 const ipInput = document.getElementById("ip_to_add");
 const addIpButton = document.getElementById("add_ip_button");
 const ipError = document.getElementById("ipError");
 
+
+// Listener to check if IP input field is valid (not empty and in the right IPv4 format):
 ipInput.addEventListener("input", function() 
 {
     if (ipInput.value.length == 0) 
@@ -24,6 +25,8 @@ ipInput.addEventListener("input", function()
     }
 });
 
+
+// Function to check if a string is in the right IPv4 format (using RegEx):
 function isIPv4(text)
 {
     const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -38,7 +41,7 @@ function boolToYesNo(boolVar)
 }
 
 
-// Function to generate the HTML code for the "Incoming Requests" table:
+// Function to generate the HTML code for the "Blacklist" table:
 function generateBlacklistTableHTML(data) 
 {
     let html = '';
@@ -56,6 +59,7 @@ function generateBlacklistTableHTML(data)
 }
 
 
+// Function to get all blacklist from the MongoDB (Python Flask server) and display them in the "Blacklist" table:
 function getBlacklist() 
 {
     let xhr = new XMLHttpRequest();
@@ -70,7 +74,6 @@ function getBlacklist()
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
         {
             data = JSON.parse(this.responseText);
-            console.log(data);
             const tbody = document.querySelector("#blacklist_data");  // Select the table body.
             tbody.innerHTML = generateBlacklistTableHTML(data);
         }
@@ -79,6 +82,8 @@ function getBlacklist()
     xhr.send();
 }
 
+
+// Function to delete a given IP from the blacklist.
 function deleteIP(ip)
 {
     let xhr = new XMLHttpRequest();
@@ -97,13 +102,20 @@ function deleteIP(ip)
                 ipError.innerHTML = this.responseText;
                 ipError.style.display = "block";
             }
+            else
+            {
+                ipInput.value = "";
+                ipError.style.display = "none";
+            }
         }
     };
 
     xhr.send();
-    getBlacklist();
+    getBlacklist();  // Refresh "Blacklist" table.
 }
 
+
+// Function to add a IP to the blacklist. The IP is taken from the input field "#ip_to_Add":
 function addIp()
 {
     let xhr = new XMLHttpRequest();
@@ -122,9 +134,14 @@ function addIp()
                 ipError.innerHTML = this.responseText;
                 ipError.style.display = "block";
             }
+            else
+            {
+                ipInput.value = "";
+                ipError.style.display = "none";
+            }
         }
     };
 
     xhr.send();
-    getBlacklist();
+    getBlacklist();  // Refresh "Blacklist" table.
 }
