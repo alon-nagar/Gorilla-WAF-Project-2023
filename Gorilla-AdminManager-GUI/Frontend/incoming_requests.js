@@ -1,20 +1,31 @@
+function dateStringToReadableString(dateString)
+{
+    const date = new Date(dateString);
+    return `${padZero(date.getUTCDate())}/${padZero(date.getUTCMonth() + 1)}/${date.getUTCFullYear()} ${padZero(date.getUTCHours())}:${padZero(date.getUTCMinutes())}:${padZero(date.getUTCSeconds())}`;
+}
+
+function padZero(num)
+{
+    return num.toString().padStart(2, '0');
+}
+
 // Function to generate the HTML code for the "Incoming Requests" table:
 function generateIncomingRequestsTableHTML(data) 
 {
     let html = '';
-    data.forEach(item => {
-    html += `<tr>
-        <td><p>${item.time}</p></td>
-        <td><p>${item.ipAddress}</p></td>
-        <td><p>${item.httpMethod}</p></td>
-        <td><p>${item.uri}</p></td>
+    data.reverse().forEach(item => {
+    html += `<tr id=${item["_id"]["$oid"]}>
+        <td><p>${dateStringToReadableString(item["Time"]["$date"])}</p></td>
+        <td><p>${item["Client's IP"]}</p></td>
+        <td><p>${item["HTTP Request"].split(" ")[0]}</p></td>
+        <td><p>${item["HTTP Request"].split(" ")[1]}</p></td>
     </tr>`;
     });
     
     return html;
 }
 
-function getData() 
+function getAllIncomingRequests() 
 {
 
     // create a new XMLHttpRequest object
@@ -28,7 +39,13 @@ function getData()
 
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             // update the HTML with the response data
-            document.getElementById("xyz").innerHTML = this.responseText;
+            data = JSON.parse(this.responseText);
+            console.log(data)
+            // Get a reference to the tbody element of the table:
+            const tbody = document.querySelector("#incoming_requests_data");
+
+            // Insert the initial rows into the table:
+            tbody.innerHTML = generateIncomingRequestsTableHTML(data);
         }
 
     };
