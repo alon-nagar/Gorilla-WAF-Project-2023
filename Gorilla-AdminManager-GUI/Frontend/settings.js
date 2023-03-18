@@ -1,4 +1,4 @@
-const urlInput = document.getElementById("ip_to_add");
+const urlInput = document.getElementById("url_to_add");
 const addUrlButton = document.getElementById("add_url_button");
 const urlError = document.getElementById("urlError");
 
@@ -20,21 +20,103 @@ urlInput.addEventListener("input", function()
 });
 
 
+function generateAllowedURLsTableHTML(data)
+{
+    let html = '';
+
+    data.forEach(item => 
+    {
+        url = item.replace("\n", "");
+        html += `<tr>
+            <td><p>${url}</p></td>
+            <td><a onclick="deleteURL('${url}')"><img src="Resources/trash-icon.png"></a></td>
+        </tr>`;
+    });
+    
+    return html;
+}
+
+
 function getAllowedURLs() 
 {
-    // TODO: Initialize the table with the URLs from the text file.
+    let xhr = new XMLHttpRequest();
+
+    // Set the HTTP method and URL:
+    xhr.open("GET", "http://localhost:4444/get_all_allowed_redirect_urls", true);
+
+    // Define what happens when the response is received:
+    xhr.onreadystatechange = function() 
+    {
+        // If the request is done and the response is OK:
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
+        {
+            data = JSON.parse(this.responseText);
+            const tbody = document.querySelector("#allowed_urls_data");  // Select the table body.
+            tbody.innerHTML = generateAllowedURLsTableHTML(data);
+        }
+    };
+
+    xhr.send();
 }
 
 
 function deleteURL(url)
 {
-    // TODO: go to the text file and remove the url.
-    // Refresh the table.
+    let xhr = new XMLHttpRequest();
+
+    // Set the HTTP method and URL:
+    xhr.open("GET", `http://localhost:4444/remove_url_from_allowed_redirect_urls?url=${url}`, true);
+
+    // Define what happens when the response is received:
+    xhr.onreadystatechange = function() 
+    {
+        // If the request is done and the response is OK:
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
+        {
+            if (this.responseText != "URL removed")
+            {
+                urlError.innerHTML = this.responseText;
+                urlError.style.display = "block";
+            }
+            else
+            {
+                urlError.value = "";
+                urlError.style.display = "none";
+            }
+        }
+    };
+
+    xhr.send();
+    getAllowedURLs();  // Refresh "Allowed URLs" table.
 }
 
 
 function addURL()
 {
-    // TODO: go to the text file and add the url.
-    // Refresh the table.
+    let xhr = new XMLHttpRequest();
+
+    // Set the HTTP method and URL:
+    xhr.open("GET", `http://localhost:4444/add_url_to_allowed_redirect_urls?url=${document.querySelector("#url_to_add").value}`, true);
+
+    // Define what happens when the response is received:
+    xhr.onreadystatechange = function() 
+    {
+        // If the request is done and the response is OK:
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
+        {
+            if (this.responseText != "URL added")
+            {
+                urlError.innerHTML = this.responseText;
+                urlError.style.display = "block";
+            }
+            else
+            {
+                urlError.value = "";
+                urlError.style.display = "none";
+            }
+        }
+    };
+
+    xhr.send();
+    getAllowedURLs();  // Refresh "Allowed URLs" table.
 }

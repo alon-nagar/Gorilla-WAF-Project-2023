@@ -285,7 +285,7 @@ body {
 }
 
 /* Space after block's explanation */
-#content main .table-data p {
+#content main .table-data .order .explanation {
 	margin-bottom: 20px;
 }
 

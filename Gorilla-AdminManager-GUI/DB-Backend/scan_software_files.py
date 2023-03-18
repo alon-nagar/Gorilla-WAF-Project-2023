@@ -49,6 +49,7 @@ class AllowedRedirectURLs:
         except Exception as e:
             return "Error: " + str(e)
     
+    
     def remove_url(self, url):
         """Function to remove a URL from the file.
 
