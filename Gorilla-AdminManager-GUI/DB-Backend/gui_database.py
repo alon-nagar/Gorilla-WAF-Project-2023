@@ -115,7 +115,7 @@ class MongoDB:
             "IP Address": ip_address,
             "Attacks Performed": "",
             "Num of Attacks": 0,
-            "Is Blocked": False,
+            "Is Blocked": True,
         }
         self.__db["Blacklist"].insert_one(entry_to_add)
         return "Added to Blacklist"

@@ -24,13 +24,25 @@ function boolToYesNo(boolVar)
 function generateIncomingRequestsTableHTML(data) 
 {
     let html = '';
-    data.reverse().forEach(item => {
-    html += `<tr id=${item["_id"]["$oid"]} onclick=expandRequest('${item["_id"]["$oid"]}')>
-        <td><p>${dateStringToReadableString(item["Time"]["$date"])}</p></td>
-        <td><p>${item["Client's IP"]}</p></td>
-        <td><p>${item["HTTP Request"].split(" ")[0]}</p></td>
-        <td><p>${item["HTTP Request"].split(" ")[1]}</p></td>
-    </tr>`;
+    let moreStyle = '';
+    
+    data.reverse().forEach(item => 
+    {
+        if (item["Is Safe"])
+        {
+            moreStyle = '';
+        }
+        else
+        {
+            moreStyle = 'style="color: #ff3030;"';
+        }
+
+        html += `<tr ${moreStyle} id=${item["_id"]["$oid"]} onclick=expandRequest('${item["_id"]["$oid"]}')>
+            <td><p>${dateStringToReadableString(item["Time"]["$date"])}</p></td>
+            <td><p>${item["Client's IP"]}</p></td>
+            <td><p>${item["HTTP Request"].split(" ")[0]}</p></td>
+            <td><p>${item["HTTP Request"].split(" ")[1]}</p></td>
+        </tr>`;
     });
     
     return html;
@@ -91,8 +103,11 @@ function expandRequest(id)
             data = JSON.parse(this.responseText);
             const divFill = document.querySelector("#expand_reqeust_table");  // Select the div.
             divFill.innerHTML = generateExpandRequestHTML(data);
+            divFill.style = "";  // Show DIV.
         }
     };
+
+    
 
     xhr.send();
 }

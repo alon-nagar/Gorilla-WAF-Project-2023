@@ -297,6 +297,15 @@ body {
 	flex-basis: 500px;
 }
 
+/* Padding between two columns */
+#content main .table-data #incoming_requests_table table td {
+	padding-right: 10px;
+}
+
+#content main .table-data #incoming_requests_table table tr th {
+	padding-right: 17px;
+}
+
 /* Design the table's title's width */
 #content main .table-data .order table {
 	width: 100%;

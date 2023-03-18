@@ -116,7 +116,7 @@ class MongoDB:
         }
         
         #current_attacks = self.get_attack_preformed(ip_address) + "," + attack_name
-        current_attacks = self.find_in_blacklist(ip_address)["Attacks Performed"] + "," + attack_name
+        current_attacks = self.find_in_blacklist(ip_address)["Attacks Performed"] + ", " + attack_name
         
         new_value = {}
         #If the client is at the maximum number of attacks, block him:

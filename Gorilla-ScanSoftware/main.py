@@ -105,7 +105,7 @@ def check_for_vulnerabilities(request_data, full_request):
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
-        return ("Cross-Site Scripting (XSS) / HTML Injection Attack", xss_text)
+        return ("XSS / HTML Injection Attack", xss_text)
     if is_sqli:
         sqli_text = sqli_text.replace('"', '\\"')
         return ("SQL Injection Attack", sqli_text)
@@ -138,7 +138,11 @@ def request_to_raw(flask_request):
     Returns:
         str: The raw HTTP request.
     """
-    request_lines = [ f"{flask_request.method} {flask_request.path} {flask_request.environ['SERVER_PROTOCOL']}" ]
+    q_mark = "?"
+    if len(flask_request.query_string) == 0:
+        q_mark = ""
+        
+    request_lines = [ f"{flask_request.method} {flask_request.path}{q_mark}{flask_request.query_string.decode('utf-8')} {flask_request.environ['SERVER_PROTOCOL']}" ]
     
     for key, value in flask_request.headers:
         request_lines.append(f"{key}: {value}")

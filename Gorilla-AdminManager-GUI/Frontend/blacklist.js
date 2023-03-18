@@ -45,14 +45,26 @@ function boolToYesNo(boolVar)
 function generateBlacklistTableHTML(data) 
 {
     let html = '';
-    data.forEach(item => {
-    html += `<tr>
-        <td><p>${item["IP Address"]}</p></td>
-        <td><p>${item["Num of Attacks"]}</p></td>
-        <td><p>${item["Attacks Performed"]}</p></td>
-        <td><p>${boolToYesNo(item["Is Blocked"])}</p></td>
-        <td><a onclick="deleteIP('${item["IP Address"]}')"><img src="Resources/trash-icon.png"></a></td>
-    </tr>`;
+    let moreStyle = '';
+
+    data.forEach(item => 
+    {
+        if (item["Is Blocked"])
+        {
+            moreStyle = 'style="color: #ff3030;"';
+        }
+        else
+        {
+            moreStyle = '';
+        }
+
+        html += `<tr ${moreStyle}>
+            <td><p>${item["IP Address"]}</p></td>
+            <td><p>${item["Num of Attacks"]}</p></td>
+            <td><p>${item["Attacks Performed"]}</p></td>
+            <td><p>${boolToYesNo(item["Is Blocked"])}</p></td>
+            <td><a onclick="deleteIP('${item["IP Address"]}')"><img src="Resources/trash-icon.png"></a></td>
+        </tr>`;
     });
     
     return html;
