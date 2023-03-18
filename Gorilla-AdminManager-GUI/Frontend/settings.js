@@ -20,6 +20,7 @@ urlInput.addEventListener("input", function()
 });
 
 
+// Function to generate the HTML code for the "Allowed URLs" table:
 function generateAllowedURLsTableHTML(data)
 {
     let html = '';
@@ -37,6 +38,7 @@ function generateAllowedURLsTableHTML(data)
 }
 
 
+// Function to get all allowed urls from the Python Flask server and display them in the "Alloed redirect URLs" table:
 function getAllowedURLs() 
 {
     let xhr = new XMLHttpRequest();
@@ -60,6 +62,7 @@ function getAllowedURLs()
 }
 
 
+// Function to delete a given URL from the allowed urls.
 function deleteURL(url)
 {
     let xhr = new XMLHttpRequest();
@@ -91,6 +94,7 @@ function deleteURL(url)
 }
 
 
+// Function to add a URL to the allowed redirect urls. The URL is taken from the input field "#url_to_add":
 function addURL()
 {
     let xhr = new XMLHttpRequest();

@@ -127,7 +127,7 @@ function deleteIP(ip)
 }
 
 
-// Function to add a IP to the blacklist. The IP is taken from the input field "#ip_to_Add":
+// Function to add a IP to the blacklist. The IP is taken from the input field "#ip_to_add":
 function addIp()
 {
     let xhr = new XMLHttpRequest();
