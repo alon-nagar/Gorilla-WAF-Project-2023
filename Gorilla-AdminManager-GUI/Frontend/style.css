@@ -281,7 +281,12 @@ body {
 	display: flex;
 	align-items: center;
 	grid-gap: 16px;
-	margin-bottom: 24px;
+	margin-bottom: 10px;
+}
+
+/* Space after block's explanation */
+#content main .table-data p {
+	margin-bottom: 20px;
 }
 
 /* Design the table's title's text */

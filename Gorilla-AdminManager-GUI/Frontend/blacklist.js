@@ -1,4 +1,4 @@
-const ipInput = document.getElementById("ip_to_add");
+const ipInput = document.getElementById("add_to_allowed_redirect_urls");
 const addIpButton = document.getElementById("add_ip_button");
 const ipError = document.getElementById("ipError");
 

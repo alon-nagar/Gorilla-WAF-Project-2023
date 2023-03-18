@@ -76,7 +76,32 @@
 				</div>
 			</div>
            
-			<h1> Welcome Settings!</h1>
+			<div class="table-data">
+
+				<div class="order" id="blacklist_table">
+					<div class="head">
+						<h3>Allowed Redirect URLs</h3>
+						<button class="refresh_button" onclick="getBlacklist()"><img src="Resources/refresh-icon.png"></button>
+					</div>
+					<p>Here you manage which URLs are allowed to redirect. 
+						<br>Please be accurate when writing the URLs, it must be exactly the way it's written in the site.</p>
+
+					<form action="#">
+						<div id="field_and_error">
+							<div class="one_line_input" id="add_to_allowed_redirect_urls">
+								<input type="text" id="ip_to_add" placeholder="Allowed redirect URL" required>
+								<button disabled="true" onclick="addURL()" type="submit" id="add_url_button"><img src="Resources/plus-icon.png"></button>
+							</div>
+							<div><p class="error-message" id="urlError">Error Message</p></div>
+						</div>
+					</form>
+
+					<table>
+						<tbody id="allowed_urls_data">
+						</tbody>
+					</table>
+				</div>
+			</div>
 
 		</main>
 		<!-- MAIN -->
@@ -84,6 +109,6 @@
 	<!-- CONTENT -->
 	
 
-	<script src="script.js"></script>
+	<script src="settings.js"></script>
 </body>
 </html>
