@@ -3,7 +3,7 @@ import gui_database
 import scan_software_files
 
 DB_FLASK_PORT = 4444
-ALLOWED_REDIRECT_URLS_FILE_PATH = "../../Gorilla-ScanSoftware/attacks/open_redirect/allowed_redirection_urls.txt"
+ALLOWED_REDIRECT_URLS_FILE_PATH = "../Gorilla-ScanSoftware/attacks/open_redirect/allowed_redirection_urls.txt"
 
 # Define the Flask app and the database:
 app = Flask(__name__)
