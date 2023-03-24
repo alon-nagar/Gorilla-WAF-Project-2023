@@ -1,4 +1,4 @@
-import os
+import os, signal
 import webbrowser
 import subprocess
 
@@ -56,9 +56,21 @@ except Exception as e:
 # Run the backend server:
 command = "nohup python3 Backend/db_flask_server.py &"
 process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+
+# Register the signal handler function to stop the process on Ctrl+C
+def signal_handler(sig, frame):
+    print("Stopping the backend server...")
+    process.kill()
+    print("Backend server stopped.")
+    print("Bye!")
+
+signal.signal(signal.SIGINT, signal_handler)
+
+# Capture the output and error of the process
 output, error = process.communicate()
 
 if error:
     print(f"Error: {error.decode()}")
 else:
     print(output.decode())
+    
