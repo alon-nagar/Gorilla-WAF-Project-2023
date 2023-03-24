@@ -15,7 +15,7 @@ def allowed_redirection_urls():
     allowed_redirection_urls = []
     
     # Open the file "allowed_redirection_urls.txt" and read each line to the list:
-    with open("attacks/open_redirect/allowed_redirection_urls.txt", "r") as f:
+    with open("../Gorilla-ScanSoftware/attacks/open_redirect/allowed_redirection_urls.txt", "r") as f:
         for line in f:
             allowed_redirection_urls.append(line.strip())
     

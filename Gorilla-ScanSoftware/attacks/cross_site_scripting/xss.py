@@ -1,6 +1,6 @@
 xss_keywords_list = []
 
-with open("attacks/cross_site_scripting/xss_keywords.txt", "r") as xss_keywords_file:
+with open("../Gorilla-ScanSoftware/attacks/cross_site_scripting/xss_keywords.txt", "r") as xss_keywords_file:
     xss_keywords_list = xss_keywords_file.read().splitlines()  # Read each line and append it to the liss (without the '\n' character).
     
 def is_request_xss(request_data):

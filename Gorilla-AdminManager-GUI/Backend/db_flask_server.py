@@ -1,14 +1,17 @@
 from flask import jsonify, request, Flask
 import gui_database
 import scan_software_files
+import linux_commands
 
 DB_FLASK_PORT = 4444
 ALLOWED_REDIRECT_URLS_FILE_PATH = "../Gorilla-ScanSoftware/attacks/open_redirect/allowed_redirection_urls.txt"
 
-# Define the Flask app and the database:
+# Define the Flask app and other variables:
 app = Flask(__name__)
 db = gui_database.MongoDB("172.17.0.2", 27017)  # Alon's IP: 172.17.0.2
 allowed_urls = scan_software_files.AllowedRedirectURLs(ALLOWED_REDIRECT_URLS_FILE_PATH)
+linux_cmd = linux_commands.LinuxCMD()
+
 
 def main():
     app.run(host="0.0.0.0", port=DB_FLASK_PORT)
@@ -112,7 +115,18 @@ def handle_remove_url_from_allowed_redirect_urls():
     except:
         return "No URL was given"
     
-    
+
+# ----------------------------------------[ WAF START/STOP ]----------------------------------------
+@app.route("/start_waf", methods=["GET"])
+def handle_start_waf():
+    return linux_cmd.start_waf()
+
+
+@app.route("/stop_waf", methods=["GET"])
+def handle_stop_waf():
+    return linux_cmd.stop_waf()
+
+
 if __name__ == "__main__":
     main()
     
