@@ -16,10 +16,28 @@
 	height: 87%;
 }
 
+/* Set the title image design (in index.html [Home page]) */
+.title-home-img {
+	display: block;
+	margin: 0 10px;
+	width: 40%;
+}
+.image-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.vertical-line {
+	height: 110px;
+	border-left: 1px solid #000;
+	margin: 0 20px;
+}
+
 /* Remove all the underline from the links */
 a {
 	text-decoration: none;
 }
+
 
 /* Remove all the bullets from the lists */
 li {
@@ -44,7 +62,6 @@ li {
 	--light-orange: #FFE0D3;
 }
 
-/* ??? */
 html {
 	overflow-x: hidden;
 }
