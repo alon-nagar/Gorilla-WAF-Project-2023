@@ -127,6 +127,11 @@ def handle_stop_waf():
     return linux_cmd.stop_waf()
 
 
+@app.route("/get_waf_status", methods=["GET"])
+def handle_get_waf_status():
+    return linux_cmd.get_waf_status()
+
+
 if __name__ == "__main__":
     main()
     

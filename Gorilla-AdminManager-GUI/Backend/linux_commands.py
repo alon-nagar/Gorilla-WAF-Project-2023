@@ -1,5 +1,7 @@
 import subprocess
+import requests
 
+WAF_PORT = 3333
 
 class LinuxCMD:
     """Class that handles linux commands and their outputs."""
@@ -10,8 +12,8 @@ class LinuxCMD:
     
     def __del__(self):
         self.stop_waf()
-     
-        
+    
+    
     def start_waf(self):
         """Function to start the WAF Python script in the background.
 
@@ -29,13 +31,32 @@ class LinuxCMD:
         Returns:
             str: "WAF stopped" if the WAF was stopped successfully, otherwise an error message.
         """
-        try:
-            self.__process.kill()
-        except OSError as e:
-            return f"Failed to stop WAF: {e}"
-        else:
-            if self.__process.returncode is None:
-                return "WAF stopped"
+        if self.__process is not None:
+            try:
+                self.__process.kill()
+            except OSError as e:
+                return f"Failed to stop WAF: {e}"
             else:
-                return f"WAF had already terminated with return code {self.__process.returncode}"
+                if self.__process.returncode is None:
+                    return "WAF stopped"
+                else:
+                    return f"WAF had already terminated with return code {self.__process.returncode}"
+        else:
+            return "WAF is not running"
     
+    
+    def get_waf_status(self):
+        """Function to check if the WAF is on or off.
+
+        Returns:
+            str: "WAF is on" if the WAF is on, otherwise "WAF is off".
+        """
+        waf_url = f"http://localhost:{WAF_PORT}"
+
+        # Send an HTTP GET request to the server and check the response status code
+        try:
+            response = requests.get(waf_url)
+            return "WAF is on"
+        except requests.exceptions.ConnectionError:
+            return "WAF is off"
+        
