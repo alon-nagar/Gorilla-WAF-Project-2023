@@ -26,14 +26,18 @@ def main():
     app.run(host="0.0.0.0", port=SCAN_FLASK_PORT)
 
 # Function to handle each incoming request (it check for vulnerabilities in it):
-@app.route("/<path:url>", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
-@app.route("/", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH"])
+@app.route("/<path:url>", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH", "TRACE"])
+@app.route("/", methods=["GET", "HEAD", "DELETE", "POST", "PUT", "PATCH", "TRACE"])
 def handle_request(url=""):
 
     text_to_check = ""
 
     # Define the real client's IP and the raw request (for saving to the DB):
     client_ip = flask.request.headers.get("X-Forwarded-For", "0.0.0.0")
+    # Ignore the X-Forwarded-For header if it's not set: 
+    #   It means that the client is not behind a proxy and is trying to connect directly to the WAF.
+    if client_ip == "0.0.0.0":
+        return "ALLOW"
     raw_request = request_to_raw(flask.request)
     
     # If the client's IP is blocked, return BLACKLIST{...} string:
@@ -44,8 +48,6 @@ def handle_request(url=""):
     # Check the request's methods and act accordingly (because the request data (that we want to scan) is in different places):
     if flask.request.method in [ "GET", "HEAD", "DELETE" ]:
         text_to_check = flask.request.args
-        print("--------------------")
-        print(flask.request.url)
         
     elif flask.request.method in [ "POST", "PUT", "PATCH" ]:
         text_to_check = flask.request.form

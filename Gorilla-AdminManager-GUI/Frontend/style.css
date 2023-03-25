@@ -29,7 +29,6 @@ li {
 /* Define the colors and fonts as constants */
 :root {
 	--poppins: 'Poppins', sans-serif;
-	--lato: 'Lato', sans-serif;
 
 	--light: #F9F9F9;
 	--turquoise: #01987f;
@@ -98,7 +97,7 @@ body {
 	height: 100%;
 	background: var(--light);
 	z-index: 2000;  /* Bring sidebar to front */
-	font-family: var(--lato);
+	font-family: var(--poppins);
 	overflow-x: hidden;
 	scrollbar-width: none;
 }
