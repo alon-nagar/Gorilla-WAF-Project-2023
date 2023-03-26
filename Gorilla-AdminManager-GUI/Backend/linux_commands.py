@@ -10,10 +10,6 @@ class LinuxCMD:
         self.__process = None
         
     
-    def __del__(self):
-        self.stop_waf()
-    
-    
     def start_waf(self):
         """Function to start the WAF Python script in the background.
 
