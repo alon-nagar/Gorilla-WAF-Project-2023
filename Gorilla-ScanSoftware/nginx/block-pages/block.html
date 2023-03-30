@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="icon" href="https://i.ibb.co/qBsjSHw/gorilla-icon.png">
+        <title>Blocked by Gorilla</title>
+        <style>
+            html {
+                background: rgb(112, 168, 176);
+            }
+            body {
+                max-width: 40em;
+                padding: 20px 20px;
+                margin: 6em auto 19em;
+                background: #fff;
+                font-family: "Lucida Grande", monospace;
+                box-shadow: 0 .3em 1em rgb(36, 33, 33);
+                border-radius: 20px;
+                font-size: 20px;
+            }
+           
+            img {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 70%;
+            }
+
+            h1 {
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <img src="https://i.ibb.co/s9xV5jg/gorilla-waf-logo-regular.png" alt="Logo-Gorilla-WAF" width="70%">
+        <h1>An attack detected by Gorilla's WAF</h1>
+       
+        <p>
+            Dear user, <br>
+            It looks like we found in:
+		        <p style="font-weight: bold; font-size:120%; text-align: center;" id="text"></p>
+	        a
+                <p style="font-weight: bold; font-size:120%; text-align: center;" id="name"></p>
+            Therfore, you have been blocked from this site temporarily. <br>
+            If you'll perform
+                <p style="font-weight: bold; font-size:120%; text-align: center;" id="count"></p>
+             more attacks, you will block from this site permanently. <br>
+            If you think this is a mistake, please contact the site administrator or Gorilla's WAF team. <br>
+        </p>
+    </body>
+
+    <script>
+        var urlParams = new URLSearchParams(window.location.search)
+        
+        let text = urlParams.get('text') || "X"
+        let name = urlParams.get('name') || "Y"
+        let count = urlParams.get('count') || "Z"
+        
+        document.getElementById('text').innerText = text
+        document.getElementById('name').innerText = name
+        document.getElementById('count').innerText = count
+    </script>
+
+</html>
