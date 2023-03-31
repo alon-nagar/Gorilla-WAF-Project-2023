@@ -1,9 +1,6 @@
 const urlInput = document.getElementById("url_to_add");
 const addUrlButton = document.getElementById("add_url_button");
 const urlError = document.getElementById("urlError");
-const switchStartStopWAF = document.getElementById("start-stop-waf");
-const switchError = document.getElementById("switchError");
-
 
 // Listener to check if URL field is not empty.
 urlInput.addEventListener("input", function() 
@@ -21,112 +18,6 @@ urlInput.addEventListener("input", function()
     }
 });
 
-
-// Listener to start/stop the WAF when the switch is turned on/off:
-switchStartStopWAF.addEventListener("change", function() 
-{
-    if (switchStartStopWAF.checked) 
-    {
-      // When the switch is turned on:
-      start_waf();
-    } 
-    else 
-    {
-      // When the switch is turned off:
-      stop_waf();
-    }
-});
-
-
-// Function to start the WAF:
-function start_waf()
-{
-    let xhr = new XMLHttpRequest();
-
-    // Set the HTTP method and URL:
-    xhr.open("GET", "http://localhost:4444/start_waf", true);
-
-    // Define what happens when the response is received:
-    xhr.onreadystatechange = function() 
-    {
-        // If the request is done and the response is OK:
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
-        {
-            if (this.responseText != "WAF started")
-            {
-                switchError.innerHTML = this.responseText;
-                switchError.style.display = "block";
-            }
-            else
-            {
-                switchError.value = "";
-                switchError.style.display = "none";
-            }
-        }
-    };
-
-    xhr.send();
-}
-
-
-// Function to stop the WAF:
-function stop_waf()
-{
-    let xhr = new XMLHttpRequest();
-
-    // Set the HTTP method and URL:
-    xhr.open("GET", "http://localhost:4444/stop_waf", true);
-
-    // Define what happens when the response is received:
-    xhr.onreadystatechange = function() 
-    {
-        // If the request is done and the response is OK:
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
-        {
-            if (this.responseText != "WAF stopped")
-            {
-                switchError.innerHTML = this.responseText;
-                switchError.style.display = "block";
-            }
-            else
-            {
-                switchError.value = "";
-                switchError.style.display = "none";
-            }
-        }
-    };
-
-    xhr.send();
-}
-
-
-// Function to get the status of the WAF:
-function get_waf_status()
-{
-    let xhr = new XMLHttpRequest();
-
-    // Set the HTTP method and URL:
-    xhr.open("GET", "http://localhost:4444/get_waf_status", true);
-
-    // Define what happens when the response is received:
-    xhr.onreadystatechange = function() 
-    {
-        // If the request is done and the response is OK:
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) 
-        {
-            if (this.responseText == "WAF is on")
-            {
-                switchStartStopWAF.checked = true;
-            }
-            else if (this.responseText == "WAF is off")
-            {
-                switchStartStopWAF.checked = false;
-            }
-        }
-    };
-
-    xhr.send();
-}
 
 // Function to generate the HTML code for the "Allowed URLs" table:
 function generateAllowedURLsTableHTML(data)
