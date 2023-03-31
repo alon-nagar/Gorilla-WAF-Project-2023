@@ -1,0 +1,568 @@
+/* Import the main font */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Design everything */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Brand image at the side nav-bar */
+.brand img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	height: 87%;
+}
+
+/* Set the title image design (in index.html [Home page]) */
+.title-home-img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+}
+
+/* Remove all the underline from the links */
+a {
+	text-decoration: none;
+}
+
+
+/* Remove all the bullets from the lists */
+li {
+	list-style: none;
+}
+
+/* Define the colors and fonts as constants */
+:root {
+	--poppins: 'Poppins', sans-serif;
+
+	--light: #F9F9F9;
+	--turquoise: #01987f;
+	--light-turquoise: #7eb3aa;
+	--light-blue: #CFE8FF;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #342E37;
+	--red: #DB504A;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+}
+
+html {
+	overflow-x: hidden;
+}
+
+/* Background body (the whole page without navbar and content) */
+body {
+	background: var(--grey);
+	overflow-x: hidden;
+}
+
+.error-message {
+	display: none;
+	color: red;
+	margin-left: 10px;
+}
+
+#field_and_error {
+	margin-bottom: 20px;
+}
+
+/* ------------------------------------------[ SCROLLBAR ]------------------------------------------ */
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track ("background") */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: var(--turquoise);
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: var(--light-turquoise);
+}
+
+/* ------------------------------------------[ SIDEBAR ]------------------------------------------ */
+/* Define the sidebar itself */
+#sidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 280px;
+	height: 100%;
+	background: var(--light);
+	z-index: 2000;  /* Bring sidebar to front */
+	font-family: var(--poppins);
+	overflow-x: hidden;
+	scrollbar-width: none;
+}
+
+/* Define logo at the top of the sidebar */
+#sidebar .brand {
+	height: 70px;
+	display: flex;
+	align-items: center;
+	background: var(--light);  /* ??? */
+	z-index: 500;
+}
+
+/* Define menu list */
+#sidebar .side-menu {
+	width: 100%;
+	margin-top: 48px;  /* Distance from brand logo */
+}
+
+/* Define each item in the menu list */
+#sidebar .side-menu li {
+	height: 48px;
+	background: transparent;
+	margin-left: 6px;
+	border-radius: 48px 0 0 48px;
+	padding: 4px;
+}
+
+/* Define clicked item in the menu list */
+#sidebar .side-menu li.active {
+	background: var(--grey);
+	position: relative;
+}
+
+
+/* Top selected box corner */
+#sidebar .side-menu li.active::before {
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	top: -40px;
+	right: 0;
+	box-shadow: 20px 20px 0 var(--grey);
+	z-index: -1;
+}
+
+/* Bottom selected box corner */
+#sidebar .side-menu li.active::after {
+	content: '';
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	bottom: -40px;
+	right: 0;
+	box-shadow: 20px -20px 0 var(--grey);
+	z-index: -1;
+}
+
+/* ??? */
+#sidebar .side-menu li a {
+	width: 100%;
+	height: 100%;
+	background: var(--light);
+	display: flex;
+	align-items: center;
+	border-radius: 48px;
+	font-size: 16px;
+	color: var(--dark);
+	white-space: nowrap;
+	overflow-x: hidden;
+	padding-left: 7%;
+}
+
+/* When hover on one of the items' texts in the menu list */
+#sidebar .side-menu li a:hover {
+	color: var(--turquoise);
+}
+
+/* When click on one of the items' texts in the menu list */
+#sidebar .side-menu.top li.active a {
+	color: var(--turquoise);
+}
+/* -----------------------------------------[ END SIDEBAR ]----------------------------------------- */
+
+
+
+/* -------------------------------------------[ CONTENT ]------------------------------------------- */
+#content {
+	position: relative;
+	width: calc(100% - 280px);
+	left: 280px;
+	transition: .3s ease;
+}
+
+
+/* MAIN */
+/* Define the main content */
+#content main {
+	width: 100%;
+	padding: 36px 24px;
+	font-family: var(--poppins);
+	max-height: calc(100vh - 56px);
+	overflow-y: auto;
+}
+
+/* Design the header itself */
+#content main .head-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	grid-gap: 16px;
+	flex-wrap: wrap;
+}
+
+/* Design the title in the header */
+#content main .head-title .left h1 {
+	font-size: 36px;
+	font-weight: 600;
+	margin-bottom: 10px;
+	color: var(--dark);
+}
+
+/* Design the path in the header */
+#content main .head-title .left .path {
+	display: flex;
+	align-items: center;
+	grid-gap: 16px;
+}
+
+/* Design the path's text itself in the header */
+#content main .head-title .left .path li a {
+	color: var(--dark-grey);
+	pointer-events: none;
+}
+
+/* Design the current page in the path */
+#content main .head-title .left .path li a.active {
+	color: var(--turquoise);
+	pointer-events: unset;
+}
+
+/* Design the table's shape */
+#content main .table-data {
+	display: flex;
+	flex-wrap: wrap;
+	grid-gap: 24px;
+	margin-top: 24px;
+	width: 100%;
+	color: var(--dark);
+}
+
+/* Design the table itself */
+#content main .table-data > div {
+	border-radius: 20px;
+	background: var(--light);
+	padding: 24px; 
+	overflow-x: auto;
+}
+
+/* Design the incoming requests table */
+#content main .table-data #incoming_requests_table {
+	height: 400px;
+}
+
+/* Design the blacklist table */
+#content main .table-data #blacklist_table {
+	height: 500px;
+}
+
+/* Design the expand request table */
+#content main .table-data #expand_reqeust_table {
+	height: 600px;
+}
+
+/* Design the table's title */
+#content main .table-data .head {
+	display: flex;
+	align-items: center;
+	grid-gap: 16px;
+	margin-bottom: 10px;
+}
+
+/* Space after block's explanation */
+#content main .table-data .order .explanation {
+	margin-bottom: 20px;
+}
+
+/* Design the table's title's text */
+#content main .table-data .head h3 {
+	margin-right: auto;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+/* Design table's width */
+#content main .table-data .order {
+	flex-grow: 1;
+	flex-basis: 500px;
+}
+
+/* Padding between two columns */
+#content main .table-data #incoming_requests_table table td {
+	padding-right: 10px;
+}
+
+#content main .table-data #incoming_requests_table table tr th {
+	padding-right: 17px;
+}
+
+/* Design the table's title's width */
+#content main .table-data .order table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+/* Sync the table's title's width with the table's width */
+#content main .table-data .order table th {
+	padding-bottom: 12px;
+	font-size: 13px;
+	text-align: left;
+	border-bottom: 1px solid var(--grey);
+}
+
+/* Design row in the table */
+#content main .table-data .order table td {
+	padding: 16px 0;
+}
+
+#incoming_requests_data tr {
+	cursor: pointer;
+}
+
+
+/* Design the left column */
+#content main .table-data .order table tr td:first-child {
+	display: flex;
+	align-items: center;
+	grid-gap: 12px;
+	padding-left: 6px;
+}
+
+/* Design hovering on the row */
+#content main .table-data .order table tbody tr:hover {
+	background: var(--grey);
+}
+
+#blacklist_table table tbody tr td a img {
+	width: 25px;
+	height: 25px;
+	padding: 0px;
+	margin: 0px;
+}
+
+#blacklist_table table tbody tr td a img:hover {
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+#blacklist_table table tbody tr td a img:active {
+	opacity: 0.3;
+}
+
+
+/* -----------------------------------------[ ADD IP BLACKLIST ] ----------------------------------------- */
+.one_line_input {
+	display: flex;
+	align-items: center;
+	height: 36px;
+	width: 500px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+.one_line_input input {
+	flex-grow: 1;
+	padding: 0 16px;
+	height: 100%;
+	border: none;
+	background: var(--grey);
+	border-radius: 36px 0 0 36px;
+	outline: none;
+	width: 100%;
+	color: var(--dark);
+	font: 400 16px var(--poppins);
+}
+
+.one_line_input button {
+	width: 36px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--blue);
+	color: var(--light);
+	font-size: 18px;
+	border: none;
+	outline: none;
+	border-radius: 0 36px 36px 0;
+	cursor: pointer;
+}
+
+#blacklist_table form div button img {
+	width: 36px;
+	height: 36px;
+}
+
+#blacklist_table form div button:hover {
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+#blacklist_table form div button:active {
+	opacity: 0.3;
+}
+
+/* -----------------------------------------[ REFRESH BUTTON ]----------------------------------------- */
+.refresh_button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 36px;
+	width: 36px;
+	background: transparent;
+	border: none;
+}
+
+.refresh_button:hover {
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.refresh_button:active {
+	opacity: 0.3;
+}
+
+.refresh_button img {
+	width: 36px;
+	height: 36px;
+}
+
+
+/* -----------------------------------------[ TOGGLE SWITCH DESIGN ] ----------------------------------------- */
+/* The switch - the box around the slider */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+  }
+  
+  .slider:before {
+	position: absolute;
+	content: "";
+	height: 26px;
+	width: 26px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+  }
+  
+  input:checked + .slider {
+	background-color: var(--turquoise);
+  }
+  
+  input:focus + .slider {
+	box-shadow: 0 0 1px var(--turquoise);
+  }
+  
+  input:checked + .slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+	border-radius: 34px;
+  }
+  
+  .slider.round:before {
+	border-radius: 50%;
+  }
+
+
+/* -----------------------------------------[ CUSTOMIZE SCREEN FOR DIFFERENT DEVICES ] ----------------------------------------- */
+
+@media screen and (max-width: 768px) {
+	#sidebar {
+		width: 200px;
+	}
+
+	#content {
+		width: calc(100% - 60px);
+		left: 200px;
+	}
+
+	#content nav .nav-link {
+		display: none;
+	}
+}
+
+
+@media screen and (max-width: 576px) {
+	#content nav form .form-input input {
+		display: none;
+	}
+
+	#content nav form .form-input button {
+		width: auto;
+		height: auto;
+		background: transparent;
+		border-radius: none;
+		color: var(--dark);
+	}
+
+	#content nav form.show .form-input input {
+		display: block;
+		width: 100%;
+	}
+	#content nav form.show .form-input button {
+		width: 36px;
+		height: 100%;
+		border-radius: 0 36px 36px 0;
+		color: var(--light);
+		background: var(--red);
+	}
+
+	
+	#content main .table-data .head {
+		min-width: 420px;
+	}
+	#content main .table-data .order table {
+		min-width: 420px;
+	}
+}

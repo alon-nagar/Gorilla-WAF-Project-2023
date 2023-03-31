@@ -3,16 +3,21 @@ async function main(r)
 	try
 	{
 		// Parse the GET parameters if they exist, to a url string, that will be fetch:
-		let url = "http://127.0.0.1:3333" + r.uri;
+		let url = "http://flask-waf:3333" + r.uri;
 		if (r.args)
 		{
 			url += "?" + dict_to_uri_parameters_string(r.args);
 		}
 
-		// Send the client's \request for vulnerability scanning (to the Python Flask server on port 3333):
+		// Assign the real client's IP to the headers sent to the Python Flask server:
+		let headers = Object.assign({}, r.headersIn, {
+			"X-Forwarded-For": r.remoteAddress,
+		});
+
+		// Send the client's request for vulnerability scanning (to the Python Flask server on port 3333):
         let reply = await ngx.fetch(url, {
         	method: r.method,
-        	headers: r.headersIn,
+        	headers: headers,
         	body: r.requestText
         });
 
@@ -46,20 +51,35 @@ async function main(r)
 			let count = json_obj.count;
 
 			// Parse the data to a block page, and return it to the client:
-			let block_page = `/block.html?name=${attack_name}&text=${blocked_text}&count=${count}`;
+			let block_page = `/block.html?name=${attack_name}&count=${count}&text=${blocked_text}`;
 
 			r.return(302, block_page);
 		}
 
 		else if (vulnerability_status.includes("BLACKLIST"))
 		{
-			// TODO: BLACKLIST blocking...
+			// Example for the JSON string from the Python Flask server:
+			// BLACKLIST { 
+			// 	"attacks_performed": "XSS Attack, SQL Injection, LFI/RFI"  --> The attacks that the current client pefromed.
+			// }
+			
+			// Parse the JSON string from the Python Flask server:
+			let json_str = vulnerability_status.split("BLACKLIST")[1];
+			let json_obj = JSON.parse(json_str);
+			
+			// Parse the necessary data from the JSON string, to pass to the 'block_blacklisted' page:
+			let attacks_performed = json_obj.attacks_performed;
+
+			// Parse the data to a block_blacklisted page, and return it to the client:
+			let block_blacklisted_page = `/block_blacklisted.html?attacks_performed=${attacks_performed}`;
+
+			r.return(302, block_blacklisted_page);
 		}
 
 		// If the response is something else, throw an error:
 		else
 		{
-			throw "Something went wrong with Gorilla's system..."
+			throw "It's not you, it us. Something went wrong with Gorilla's system..."
 		}
 	}
 	catch (error_msg)
@@ -85,5 +105,6 @@ function dict_to_uri_parameters_string(obj)
 	
 	return str.join("&");
 }
+
 
 export default { main };

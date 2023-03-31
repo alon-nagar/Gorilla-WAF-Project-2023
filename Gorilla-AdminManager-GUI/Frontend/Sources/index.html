@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+    <link rel="icon" href="Resources/gorilla-admin-icon.png">
+
+	<title>Gorilla Admin Manager</title>
+</head>
+
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+
+		<a href="index.html" class="brand">
+            <img src="Resources/gorilla-admin-logo.png">
+		</a>
+
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="index.html">
+					<span class="text">Home</span>
+				</a>
+			</li>
+			<li>
+				<a href="incoming_requests.html">
+					<span class="text">Incoming Requests</span>
+				</a>
+			</li>
+			<li>
+				<a href="blacklist.html">
+					<span class="text">Blacklist</span>
+				</a>
+			</li>
+			<li>
+				<a href="settings.html">
+					<span class="text">Settings</span>
+				</a>
+			</li>
+		</ul>
+
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		
+		<!-- MAIN -->
+		<main>
+            
+            <!-- Title of the page, with the right path -->
+            <div class="head-title">
+				<div class="left">
+					<h1>Home</h1>
+					<ul class="path">
+						<li>
+							<a href="index.html">Gorilla's Admin Manager ></a>
+						</li>
+						<li>
+							<a class="active" href="index.html">Home</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+            
+			<div class="table-data">
+				<div class="order">
+					<img class="title-home-img" src="Resources/gorilla-admin-logo.png">
+					<h1>About Gorilla Admin Manager</h1>
+					<p>
+						Gorilla Admin Manager is a web application that allows you to manage the Gorilla WAF. <br>
+						You can view and change the incoming requests, blacklisted IPs, and change the settings. <br>
+					</p>
+					<br>
+					<h3>Features</h3>
+					<p>
+						-> View the incoming requests. <br>
+						-> Add/Remove blacklisted IPs<br>
+						-> Start/Stop the WAF. <br>
+						-> Add/Remove allowed URLs to redirect. <br>
+					</p>
+				</div>
+			</div>
+
+			<div class="table-data">
+				<div class="order">
+					
+					<div class="image-container">
+						<img class="title-home-img" src="Resources/gorilla-waf-logo-regular.png">
+					  </div>
+					  
+					<h1>About Gorilla WAF</h1>
+					<p>
+						Gorilla is a powerfull Web-Application Firewall (WAF), that detect and block different web attacks. <br>
+						It communicates with a local MongoDB database that saves the attacker's IP address, and sits behind a Nginx server in Linux environment. <br>
+					</p>
+					<br>
+					<h3>Supported Attacks</h3>
+					<p>
+						-> Cross-Site Scripting (XSS) & HTML Injection (HTMLi). <br>
+						-> SQL Injection (SQLi) [Note: Detection occurs with Machine Learning]. <br>
+						-> HTTP Parameter Pollution (HPP). <br>
+						-> SSI Injection (SSIi). <br>
+						-> Open Redirect Vulnerability. <br>
+						-> HTTP Host Header Injection (HHHi). <br>
+						-> Cross-Site Tracing (XST). <br>
+					</p>
+					<br>
+					<h3>Install Instructions</h3>
+					<p>
+						You can find the installation instructions in the <a href="https://github.com/alon-nagar/Gorilla-WAF-Project-2023" target="_blank"><u>Gorilla's GitHub repository</u></a>. <br>
+					</p>
+				</div>
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+</body>
+</html>

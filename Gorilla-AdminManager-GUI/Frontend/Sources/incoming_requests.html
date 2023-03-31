@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+    <link rel="icon" href="Resources/gorilla-admin-icon.png">
+
+	<title>Gorilla Admin Manager</title>
+</head>
+
+<body onload="getAllIncomingRequests();">
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+
+		<a href="index.html" class="brand">
+            <img  src="Resources/gorilla-admin-logo.png">
+		</a>
+
+		<ul class="side-menu top">
+			<li>
+				<a href="index.html">
+					<span class="text">Home</span>
+				</a>
+			</li>
+			<li class="active">
+				<a href="incoming_requests.html">
+					<span class="text">Incoming Requests</span>
+				</a>
+			</li>
+			<li>
+				<a href="blacklist.html">
+					<span class="text">Blacklist</span>
+				</a>
+			</li>
+			<li>
+				<a href="settings.html">
+					<span class="text">Settings</span>
+				</a>
+			</li>
+		</ul>
+
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		
+		<!-- MAIN -->
+		<main>
+            	
+            <!-- Title of the page, with the right path -->
+            <div class="head-title">
+				<div class="left">
+					<h1>Incoming Requests</h1>
+					<ul class="path">
+						<li>
+							<a href="index.html">Gorilla's Admin Manager ></a>
+						</li>
+						<li>
+							<a class="active" href="incoming_requests.html">Incoming Requests</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+            
+
+			<div class="table-data">
+
+				<div class="order" id="incoming_requests_table">
+					<div class="head">
+						<h3>Recent Incoming Requests</h3>
+						<button class="refresh_button" onclick="getAllIncomingRequests()"><img src="Resources/refresh-icon.png"></button>
+					</div>
+					<p class="explanation">Here you can see all the incoming HTTP requests to your site. Blocked requests are red.
+						<br>If you want to see more details (like full HTTP request, attack detected, etc.) click on the request.</p>
+
+                    <table>
+						<thead>
+							<tr>
+                                <th>Time</th>
+								<th>IP Address</th>
+								<th>HTTP Method</th>
+								<th>URI</th>
+							</tr>
+						</thead>
+						<tbody id="incoming_requests_data">
+						</tbody>
+					</table>
+				</div>
+                
+				<div id="expand_reqeust_table" style="display: none;">
+                    <p>To see full HTTP request and its detail, click on one in the table</p>
+                </div>
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+
+	<script src="incoming_requests.js"></script>
+</body>
+</html>
