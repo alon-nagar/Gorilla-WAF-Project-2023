@@ -157,3 +157,46 @@ class MongoDB:
         }
         return self.__db["Blacklist"].find_one(entry_to_find) is not None
     
+    
+    # ----------------------------------------[ ALLOWED REDIRECT URLs ]----------------------------------------
+    def get_all_allowed_urls(self):
+        """
+        Return all the allowed redirect URLs from the "AllowedRedirectURLs" collection.
+        It parses the collection and returns a list of all the URLs (only).
+        
+        Returns:
+            list of str: List of all the allowed redirect URLs in strings.
+        """
+        all_collection_data = list(self.__db["AllowedRedirectURLs"].find())
+        all_urls = [entry["URL"] for entry in all_collection_data]
+        return all_urls
+        
+    
+    def add_allowed_url(self, url):
+        """
+        Add new entry to the "AllowedRedirectURLs" collection, including all the information needed.
+        
+        Args:
+            url (str): The allowed redirect URL.
+        """
+        
+        # Define the entry that we want to add to the collection, and add it:
+        entry_to_add = {
+            "URL": url
+        }
+        self.__db["AllowedRedirectURLs"].insert_one(entry_to_add)
+    
+    
+    def delete_allowed_url(self, url):
+        """
+        Delete one entry from the "AllowedRedirectURLs" collection, by the given URL.
+
+        Args:
+            url (str): The allowed redirect URL to delete.
+        """
+        # Define the entry we want to delete in "AllowedRedirectURLs" collection and delete it:
+        entry_to_delete = {
+            "URL": url, 
+        }
+        self.__db["AllowedRedirectURLs"].delete_one(entry_to_delete)
+    

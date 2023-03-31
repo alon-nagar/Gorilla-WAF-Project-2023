@@ -3,7 +3,7 @@ async function main(r)
 	try
 	{
 		// Parse the GET parameters if they exist, to a url string, that will be fetch:
-		let url = "http://flask:3333" + r.uri;
+		let url = "http://flask-waf:3333" + r.uri;
 		if (r.args)
 		{
 			url += "?" + dict_to_uri_parameters_string(r.args);

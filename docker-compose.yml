@@ -1,22 +1,40 @@
 version: '3'
 services:
-  nginx:
+
+  nginx-waf:
     image: nginx-gorilla-waf
     ports:
       - "80:80"
     depends_on:
-      - flask
+      - flask-waf
       - website
-  flask:
+
+  flask-waf:
     image: flask-gorilla-waf
     ports:
       - "3333:3333"
     depends_on:
       - mongo
+
+  nginx-gui:
+    image: frontend-gorilla-gui
+    ports:
+      - "5555:80"
+    depends_on:
+      - flask-gui
+
+  flask-gui:
+    image: backend-gorilla-gui
+    ports:
+      - "4444:4444"
+    depends_on:
+      - mongo
+
   mongo:
     image: mongo
     ports:
       - "27017:27017"
+
   website:
     image: vulnerables/web-dvwa
     ports:
