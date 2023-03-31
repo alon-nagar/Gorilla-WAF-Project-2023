@@ -36,6 +36,6 @@ services:
       - "27017:27017"
 
   website:
-    image: vulnerables/web-dvwa
+    image: raesene/bwapp
     ports:
       - "7777:80"
