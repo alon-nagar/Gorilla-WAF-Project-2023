@@ -51,7 +51,7 @@ async function main(r)
 			let count = json_obj.count;
 
 			// Parse the data to a block page, and return it to the client:
-			let block_page = `/block.html?name=${attack_name}&count=${count}&text=${blocked_text}`;
+			let block_page = `/block.html?name=${attack_name}&count=${count}&text=${encodeURIComponent(blocked_text)}`;
 
 			r.return(302, block_page);
 		}
