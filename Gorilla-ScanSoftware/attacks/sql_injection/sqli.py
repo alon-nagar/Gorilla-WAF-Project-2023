@@ -10,10 +10,11 @@ Requirements:
 
 import pickle
 import re
+import numpy as np
 
 
-sqli_detection_model = pickle.load(open("/scan-software/attacks/sql_injection/ml_sqli_model.pickle", "rb"))
-vectorizer = pickle.load(open("/scan-software/attacks/sql_injection/vectorizer_ml_sqli_model.pickle", "rb"))
+sqli_detection_model = pickle.load(open("ml_sqli_model.pickle", "rb"))
+vectorizer = pickle.load(open("vectorizer_ml_sqli_model.pickle", "rb"))
 
 
 def is_request_sqli(request_data):
@@ -44,11 +45,11 @@ def is_text_sqli(text):
     """
     if len(text) > 0:  # To avoid `ValueError: empty vocabulary; perhaps the documents only contain stop words`
         
-        # Help the ML model to avoid false positives by checking for "or" and "and" keywords ONLY:
-        if re.search(r"(?:or|and)+", text.replace(" ", "")):
-            return False
+        # # Help the ML model to avoid false positives by checking for "or" and "and" keywords ONLY:
+        # if re.search(r"(?:or|and)+", text.replace(" ", "")):
+        #     return False
         
         # Check if the ML model detected SQLi:
-        return sqli_detection_model.predict(vectorizer.transform([text]))[0] == 1
+        return sqli_detection_model.predict(vectorizer.transform([text]).toarray())[0]
     
     return False

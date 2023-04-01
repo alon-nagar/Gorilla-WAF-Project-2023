@@ -6,6 +6,6 @@ COPY . /scan-software/
 
 EXPOSE 3333
 
-RUN pip3 install flask pymongo datetime pandas scikit-learn
+RUN pip3 install flask pymongo datetime pandas scikit-learn nltk numpy
 
 CMD ["python3", "/scan-software/main-waf.py"]
