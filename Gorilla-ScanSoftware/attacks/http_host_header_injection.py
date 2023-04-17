@@ -18,9 +18,9 @@ def is_request_http_host_header(request_headers):
     host_header_names = ['Host', 'X-Forwarded-Host', 'X-Host', 'X-Forwarded-Server', 'X-HTTP-Host-Override', 'Forwarded']
     
     # Check if there are more than one host header (all kinds) in the request (HHI attack):
-    host_headers_in_request = set(host_header_names).intersection(set(request_headers.keys()))
+    host_headers_in_request = list(set(host_header_names).intersection(set(request_headers.keys())))
     if len(host_headers_in_request) > 1:
-        return (True, f"{host_headers_in_request}: {request_headers.getlist(host_headers_in_request)}")
+        return (True, f"{', '.join(host_headers_in_request)}: {request_headers.getlist(host_headers_in_request[0])}")
     
     # For each header name, get all the values of the header and check them for HHI attacks
     for curr_host_header in host_header_names:
