@@ -98,13 +98,24 @@ async function main(r)
 function dict_to_uri_parameters_string(obj) 
 {
 	var str = [];
-	for (var p in obj)
-	{
-	   str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-	}
 	
+	for (var p in obj) 
+	{
+		if (Array.isArray(obj[p])) 
+		{
+			for (var i = 0; i < obj[p].length; i++) 
+			{
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][i]));
+			}
+		} 
+		else 
+		{
+			str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+		}
+	}
+
 	return str.join("&");
 }
-
+  
 
 export default { main };

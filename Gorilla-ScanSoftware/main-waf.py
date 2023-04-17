@@ -101,7 +101,7 @@ def check_for_vulnerabilities(request_data, full_request):
     (is_sqli, sqli_text) = sqli.is_request_sqli(request_data)
     (is_hhi, hhi_text) = host_header_injection.is_request_http_host_header(full_request.headers)
     (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(db, request_data)
-    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, full_request.url)
+    (is_hpp, hpp_text) = hpp.is_request_hpp(full_request.url)
     (is_ssii, ssii_text) = ssi.is_request_ssi_injection(request_data)
     (is_xst, xst_text) = xst.is_request_xst(full_request)
     
@@ -111,9 +111,9 @@ def check_for_vulnerabilities(request_data, full_request):
     if is_sqli:
         sqli_text = sqli_text.replace('"', '\\"')
         return ("SQL Injection Attack", sqli_text)
-    # elif is_hpp:
-    #     hpp_text = hpp_text.replace('"', '\\"')
-    #     return ("HTTP Parameter Pollution Attack", hpp_text)
+    elif is_hpp:
+        hpp_text = hpp_text.replace('"', '\\"')
+        return ("HTTP Parameter Pollution Attack", hpp_text)
     elif is_hhi:
         return ("Host Header Injection Attack", hhi_text)
     elif is_open_redirect:
