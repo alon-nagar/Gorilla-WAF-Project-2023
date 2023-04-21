@@ -4,7 +4,7 @@ async function main(r)
 	{
 		// Parse the GET parameters if they exist, to a url string, that will be fetch:
 		let url = "http://flask-waf:3333" + r.uri;
-		if (r.args)
+		if (r.args) 
 		{
 			url += "?" + dict_to_uri_parameters_string(r.args);
 		}
@@ -13,13 +13,13 @@ async function main(r)
 		let headers = Object.assign({}, r.headersIn, {
 			"X-Forwarded-For": r.remoteAddress,
 		});
-
+		
 		// Send the client's request for vulnerability scanning (to the Python Flask server on port 3333):
-        let reply = await ngx.fetch(url, {
-        	method: r.method,
-        	headers: headers,
-        	body: r.requestText
-        });
+		let reply = await ngx.fetch(url, {
+			method: r.method,
+			headers: headers,
+			body: r.requestText
+		});
 
 		// Get the response from the Python Flask server (which is either "ALLOW", "BLOCK", or "BLACKLIST"):
 		let vulnerability_status = await reply.text();
@@ -79,7 +79,7 @@ async function main(r)
 		// If the response is something else, throw an error:
 		else
 		{
-			throw "It's not you, it us. Something went wrong with Gorilla's system..."
+			throw "It's not you, it us. Something went wrong with Gorilla's system..." + "\n" + vulnerability_status;
 		}
 	}
 	catch (error_msg)
@@ -98,13 +98,24 @@ async function main(r)
 function dict_to_uri_parameters_string(obj) 
 {
 	var str = [];
-	for (var p in obj)
-	{
-	   str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-	}
 	
+	for (var p in obj) 
+	{
+		if (Array.isArray(obj[p])) 
+		{
+			for (var i = 0; i < obj[p].length; i++) 
+			{
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p][i]));
+			}
+		} 
+		else 
+		{
+			str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+		}
+	}
+
 	return str.join("&");
 }
-
+  
 
 export default { main };

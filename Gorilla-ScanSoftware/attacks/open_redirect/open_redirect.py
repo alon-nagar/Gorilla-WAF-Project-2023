@@ -1,26 +1,6 @@
 import re
 from urllib.parse import urlparse, parse_qs, unquote
-
-
-# def allowed_redirection_urls():
-#     """
-#     Function to get a list of allowed redirection URLs from the file "allowed_redirection_urls.txt".
-    
-#     Args:
-#         None.
-        
-#     Returns:
-#         list: A list of allowed redirection URLs.
-#     """
-#     allowed_redirection_urls = []
-    
-#     # Open the file "allowed_redirection_urls.txt" and read each line to the list:
-#     with open("/scan-software/attacks/open_redirect/allowed_redirection_urls.txt", "r") as f:
-#         for line in f:
-#             allowed_redirection_urls.append(line.strip())
-    
-#     return allowed_redirection_urls
-            
+ 
     
 def is_request_open_redirect(db, request_data):
     """Function to check if a request contains an open redirect attack.

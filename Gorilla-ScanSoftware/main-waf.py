@@ -1,6 +1,8 @@
 import flask
 from datetime import datetime
 import urllib.parse
+from urllib.parse import parse_qs, urlencode
+from werkzeug.datastructures import ImmutableMultiDict
 
 # Attack defense modules:
 import attacks.cross_site_scripting.xss as xss
@@ -50,7 +52,7 @@ def handle_request(url=""):
         text_to_check = flask.request.args
         
     elif flask.request.method in [ "POST", "PUT", "PATCH" ]:
-        text_to_check = flask.request.form
+        text_to_check = ImmutableMultiDict(parse_qs(flask.request.data.decode('utf-8')))
     
     elif flask.request.method == "TRACE":
         text_to_check = ""
@@ -101,22 +103,24 @@ def check_for_vulnerabilities(request_data, full_request):
     (is_sqli, sqli_text) = sqli.is_request_sqli(request_data)
     (is_hhi, hhi_text) = host_header_injection.is_request_http_host_header(full_request.headers)
     (is_open_redirect, open_redirect_text) = open_redirect.is_request_open_redirect(db, request_data)
-    (is_hpp, hpp_text) = hpp.is_request_hpp(request_data, full_request.url)
+    (is_hpp, hpp_text) = hpp.is_request_hpp(full_request.url)
     (is_ssii, ssii_text) = ssi.is_request_ssi_injection(request_data)
     (is_xst, xst_text) = xst.is_request_xst(full_request)
     
     if is_xss:
         xss_text = xss_text.replace('"', '\\"')
         return ("XSS / HTML Injection Attack", xss_text)
-    if is_sqli:
+    elif is_sqli:
         sqli_text = sqli_text.replace('"', '\\"')
         return ("SQL Injection Attack", sqli_text)
-    # elif is_hpp:
-    #     hpp_text = hpp_text.replace('"', '\\"')
-    #     return ("HTTP Parameter Pollution Attack", hpp_text)
+    elif is_hpp:
+        hpp_text = hpp_text.replace('"', '\\"')
+        return ("HTTP Parameter Pollution Attack", hpp_text)
     elif is_hhi:
+        hhi_text = hhi_text.replace('"', '\\"')
         return ("Host Header Injection Attack", hhi_text)
     elif is_open_redirect:
+        open_redirect_text = open_redirect_text.replace('"', '\\"')
         return ("Open Redirect Attack", open_redirect_text)
     elif is_ssii:
         ssii_text = ssii_text.replace('"', '\\"')
@@ -149,9 +153,10 @@ def request_to_raw(flask_request):
     for key, value in flask_request.headers:
         request_lines.append(f"{key}: {value}")
     
-    if flask_request.form:
+    if flask.request.data.decode('utf-8') != "":
         request_lines.append(" ")
-        request_lines.append(urllib.parse.urlencode(flask_request.form, doseq=False))
+        request_lines.append(flask.request.data.decode('utf-8'))
+        request_lines.append(str(flask.request.form))
 
     return "\n".join(request_lines)
 
