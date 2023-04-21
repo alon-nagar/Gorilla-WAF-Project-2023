@@ -2,7 +2,7 @@ version: '3'
 services:
 
   nginx-waf:
-    image: nginx-gorilla-waf
+    image: alonnagar/gorilla:nginx-gorilla-waf
     ports:
       - "80:80"
     depends_on:
@@ -10,21 +10,21 @@ services:
       - website
 
   flask-waf:
-    image: flask-gorilla-waf
+    image: alonnagar/gorilla:flask-gorilla-waf
     ports:
       - "3333:3333"
     depends_on:
       - mongo
 
   nginx-gui:
-    image: frontend-gorilla-gui
+    image: alonnagar/gorilla:frontend-gorilla-gui
     ports:
       - "5555:80"
     depends_on:
       - flask-gui
 
   flask-gui:
-    image: backend-gorilla-gui
+    image: alonnagar/gorilla:backend-gorilla-gui
     ports:
       - "4444:4444"
     depends_on:
