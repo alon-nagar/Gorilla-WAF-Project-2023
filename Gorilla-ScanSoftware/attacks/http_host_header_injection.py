@@ -5,7 +5,7 @@ def is_request_http_host_header(request_headers):
         Function to check if a request contains a Host Header injection attack.
           HTTP Host Header Injection (HHI) attack occurs when:
             1. Multiple Host headers in the same HTTP request.
-            2. Multiple hosts in the same Host header (like: "Host: www.google.con\\nwww.samsung.com").
+            2. Multiple hosts in the same Host header (like: "Host: www.google.con\r\nwww.samsung.com").
 
         Args:
             request_headers (werkzeug.datastructures.Headers): The HTTP request's headers.
