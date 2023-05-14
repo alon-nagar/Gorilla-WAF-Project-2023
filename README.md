@@ -8,8 +8,9 @@ It communicates with a local database with MongoDB, that has the blocked attacke
 - 📑 SQL Injection (SQLi) [Note: Detection occurs with a ML model].
 - 🏭 HTTP Parameter Pollution (HPP).
 - ⏮️ SSI Injection (SSIi).
-- 📬 Open Redirect Attack.
-- 🌓 HTTP Response Splitting.
+- 📬 Open Redirect Vulnerability.
+- 🤕 HTTP Host Header Injection.
+- 🛤️ Cross-Site Tracing.
 ## Installation Guide
 1. Install Docker & Docker Compose.
 2. Create a file named "docker-compose.yml" with this content (pay attention to the things you need to change):
